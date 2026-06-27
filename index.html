@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>浙游通 - 浙江旅游一站式服务平台</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 首页专用配色方案 - 青绿色系 */
+        body {
+            background-color: #F5F8FA;
+        }
+        
+        .zyt-header {
+            background-color: #60AFC4;
+        }
+        
+        .search-btn {
+            background-color: #529EAF;
+        }
+        
+        .search-btn:hover {
+            background-color: #4A9AAA;
+        }
+        
+        .zyt-footer {
+            background-color: #60AFC4;
+        }
+
+        /* 视频弹窗样式 */
+        .video-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .video-modal-overlay.show {
+            display: flex;
+        }
+
+        .video-container {
+            position: relative;
+            width: 90vw;
+            height: 85vh;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .video-close-btn {
+            position: fixed;
+            top: 20px;
+            right: 5vw;
+            width: 40px;
+            height: 40px;
+            background: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            color: black;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.2s;
+            z-index: 10000;
+        }
+
+        .video-close-btn:hover {
+            transform: scale(1.1);
+        }
+
+        body.no-scroll {
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="zyt-header">
+        <div class="zyt-container">
+            <div class="zyt-logo">
+                <span class="logo-icon">🗺️</span>
+                <span class="logo-text">浙游通</span>
+            </div>
+            <nav class="zyt-nav">
+                <a href="#" class="nav-item active">首页</a>
+                <a href="#" class="nav-item">热门景点</a>
+                <a href="#" class="nav-item">美食推荐</a>
+                <a href="#" class="nav-item">酒店住宿</a>
+                <a href="#" class="nav-item">旅游攻略</a>
+                <a href="#" class="nav-item">关于我们</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 搜索区域 -->
+    <div class="zyt-search-bar">
+        <div class="zyt-container">
+            <div class="search-left">
+                <select id="citySelect" class="city-select">
+                    <option value="hongzhou.html">杭州市</option>
+                    <option value="ningbo.html">宁波市</option>
+                    <option value="wengzhou.html">温州市</option>
+                    <option value="jiaxing.html">嘉兴市</option>
+                    <option value="huzhou.html">湖州市</option>
+                    <option value="shaoxing.html">绍兴市</option>
+                    <option value="jinghua.html">金华市</option>
+                    <option value="quzhou.html">衢州市</option>
+                    <option value="zhoushann.html">舟山市</option>
+                    <option value="taizhou.html">台州市</option>
+                    <option value="lishui.html">丽水市</option>
+                </select>
+            </div>
+            <div class="search-center">
+                <input type="text" class="search-input" placeholder="搜索景点、美食、酒店...">
+            </div>
+            <div class="search-right">
+                <button id="searchBtn" class="search-btn">🔍 搜索</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主体内容 -->
+    <div class="zyt-main">
+        <div class="zyt-container">
+            <!-- 左侧分类侧边栏 -->
+            <aside class="zyt-sidebar">
+                <div class="sidebar-title">🏛️ 人文古迹</div>
+                <div class="sidebar-items">
+                    <a href="#" class="sidebar-item">古镇</a>
+                    <a href="#" class="sidebar-item">寺庙</a>
+                    <a href="#" class="sidebar-item">博物馆</a>
+                </div>
+                
+                <div class="sidebar-title">🏞️ 自然风光</div>
+                <div class="sidebar-items">
+                    <a href="#" class="sidebar-item">山水</a>
+                    <a href="#" class="sidebar-item">海岛</a>
+                    <a href="#" class="sidebar-item">湖泊</a>
+                </div>
+                
+                <div class="sidebar-title">🍜 特色美食</div>
+                <div class="sidebar-items">
+                    <a href="#" class="sidebar-item">杭帮菜</a>
+                    <a href="#" class="sidebar-item">海鲜</a>
+                    <a href="#" class="sidebar-item">小吃</a>
+                </div>
+                
+                <div class="sidebar-title">🏨 酒店住宿</div>
+                <div class="sidebar-items">
+                    <a href="#" class="sidebar-item">民宿</a>
+                    <a href="#" class="sidebar-item">度假村</a>
+                    <a href="#" class="sidebar-item">星级酒店</a>
+                </div>
+                
+                <div class="sidebar-title">👨‍👩‍👧 主题旅游</div>
+                <div class="sidebar-items">
+                    <a href="#" class="sidebar-item">亲子</a>
+                    <a href="#" class="sidebar-item">研学</a>
+                    <a href="#" class="sidebar-item">摄影</a>
+                </div>
+                
+                <div class="sidebar-title">🛍️ 文创购物</div>
+                <div class="sidebar-items">
+                    <a href="#" class="sidebar-item">特产</a>
+                    <a href="#" class="sidebar-item">手工艺品</a>
+                    <a href="#" class="sidebar-item">纪念品</a>
+                </div>
+            </aside>
+
+            <!-- 右侧主内容区 -->
+            <main class="zyt-content">
+                <!-- 轮播Banner -->
+            <div class="zyt-banner">
+                <div class="banner-slides">
+                    <div class="banner-slide active">
+                        <img src="images/杭州1.jpeg" alt="浙江风景1" style="width:100%; height:100%; object-fit:cover; display:block;">
+                    </div>
+                    <div class="banner-slide">
+                        <img src="images/绍兴/1.png" alt="浙江风景2" style="width:100%; height:100%; object-fit:cover; display:block;">
+                    </div>
+                    <div class="banner-slide">
+                        <img src="images/宁波/10东钱湖.jpg" alt="宁波东钱湖" style="width:100%; height:100%; object-fit:cover; display:block;">
+                    </div>
+                    <div class="banner-slide">
+                        <img src="images/湖州/4.jpg" alt="湖州风景" style="width:100%; height:100%; object-fit:cover; display:block;">
+                    </div>
+                    <div class="banner-slide">
+                        <img src="images/嘉兴/南湖2.jpg" alt="嘉兴南湖" style="width:100%; height:100%; object-fit:cover; display:block;">
+                    </div>
+                    <div class="banner-slide">
+                        <img src="images/金华/仙华山.jpg" alt="金华仙华山" style="width:100%; height:100%; object-fit:cover; display:block;">
+                    </div>
+                    <div class="banner-slide">
+                        <img src="images/丽水/2.jpg" alt="丽水风景" style="width:100%; height:100%; object-fit:cover; display:block;">
+                    </div>
+                    <div class="banner-slide">
+                        <img src="images/衢州/5.jpg" alt="衢州风景" style="width:100%; height:100%; object-fit:cover; display:block;">
+                    </div>
+                    <div class="banner-slide">
+                        <img src="images/台州/1.jpg" alt="台州风景" style="width:100%; height:100%; object-fit:cover; display:block;">
+                    </div>
+                    <div class="banner-slide">
+                        <img src="images/温州/4百丈漈.jpg" alt="温州百丈漈" style="width:100%; height:100%; object-fit:cover; display:block;">
+                    </div>
+                    <div class="banner-slide">
+                        <img src="images/舟山/东极岛.jpg" alt="舟山东极岛" style="width:100%; height:100%; object-fit:cover; display:block;">
+                    </div>
+                </div>
+                <div class="banner-overlay">
+                    <div class="banner-content">
+                        <h2 class="banner-title">✨ 诗画浙江，山水之美</h2>
+                        <p class="banner-desc">探索浙江11个地级市的绝美风景与独特文化，开启您的诗意之旅</p>
+                        <button class="banner-btn">立即探索</button>
+                    </div>
+                </div>
+                <div class="banner-indicators">
+                    <span class="banner-indicator active" data-index="0"></span>
+                    <span class="banner-indicator" data-index="1"></span>
+                    <span class="banner-indicator" data-index="2"></span>
+                    <span class="banner-indicator" data-index="3"></span>
+                    <span class="banner-indicator" data-index="4"></span>
+                    <span class="banner-indicator" data-index="5"></span>
+                    <span class="banner-indicator" data-index="6"></span>
+                    <span class="banner-indicator" data-index="7"></span>
+                    <span class="banner-indicator" data-index="8"></span>
+                    <span class="banner-indicator" data-index="9"></span>
+                    <span class="banner-indicator" data-index="10"></span>
+                </div>
+            </div>
+
+                <!-- 热门旅游城市 -->
+                <section class="zyt-section">
+                    <h3 class="section-header">🔥 热门旅游城市</h3>
+                    <div class="city-cards">
+                        <a href="hongzhou.html" class="city-link">
+                            <div class="city-card hangzhou-card">
+                                <img src="images/杭州1.jpeg" alt="杭州" class="city-bg-img">
+                                <div class="city-overlay">
+                                    <h4 class="city-name">杭州</h4>
+                                    <p class="city-desc">人间天堂，西湖美景闻名天下</p>
+                                    <span class="city-tag">热门</span>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="ningbo.html" class="city-link">
+                            <div class="city-card ningbo-card">
+                                <img src="images/宁波/10东钱湖.jpg" alt="宁波" class="city-bg-img">
+                                <div class="city-overlay">
+                                    <h4 class="city-name">宁波</h4>
+                                    <p class="city-desc">海港城市，千年商帮文化</p>
+                                    <span class="city-tag">推荐</span>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="shaoxing.html" class="city-link">
+                            <div class="city-card shaoxing-card">
+                                <img src="images/绍兴/4.jpg" alt="绍兴" class="city-bg-img">
+                                <div class="city-overlay">
+                                    <h4 class="city-name">绍兴</h4>
+                                    <p class="city-desc">历史名城，鲁迅故里</p>
+                                    <span class="city-tag">文化</span>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="wengzhou.html" class="city-link">
+                            <div class="city-card wenzhou-card">
+                                <img src="images/温州/5.jpg" alt="温州" class="city-bg-img">
+                                <div class="city-overlay">
+                                    <h4 class="city-name">温州</h4>
+                                    <p class="city-desc">山水温州，雁荡奇秀</p>
+                                    <span class="city-tag">自然</span>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="zhoushann.html" class="city-link">
+                            <div class="city-card zhoushan-card">
+                                <img src="images/舟山/东极岛.jpg" alt="舟山" class="city-bg-img">
+                                <div class="city-overlay">
+                                    <h4 class="city-name">舟山</h4>
+                                    <p class="city-desc">千岛之城，海天佛国</p>
+                                    <span class="city-tag">热门</span>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="jiaxing.html" class="city-link">
+                            <div class="city-card jiaxing-card">
+                                <img src="images/嘉兴/乌镇.jpg" alt="嘉兴" class="city-bg-img">
+                                <div class="city-overlay">
+                                    <h4 class="city-name">嘉兴</h4>
+                                    <p class="city-desc">江南水乡，乌镇西塘</p>
+                                    <span class="city-tag">推荐</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </section>
+
+                <!-- 文旅资讯 -->
+                <section class="zyt-section">
+                    <h3 class="section-header">📰 文旅资讯</h3>
+                    <div class="news-list">
+                        <div class="news-item">
+                            <span class="news-date">2024-06-01</span>
+                            <div class="news-content">
+                                <h4 class="news-title">2024浙江文化和旅游消费季盛大开启</h4>
+                                <p class="news-desc">全省各地推出多项优惠活动，门票减免、住宿折扣等你来享...</p>
+                            </div>
+                        </div>
+                        <div class="news-item">
+                            <span class="news-date">2024-05-28</span>
+                            <div class="news-content">
+                                <h4 class="news-title">杭州西湖景区智慧旅游升级，扫码入园更便捷</h4>
+                                <p class="news-desc">新上线的智慧旅游系统实现了门票预约、导览讲解等一站式服务...</p>
+                            </div>
+                        </div>
+                        <div class="news-item">
+                            <span class="news-date">2024-05-25</span>
+                            <div class="news-content">
+                                <h4 class="news-title">宁波方特东方神画全新主题区开放</h4>
+                                <p class="news-desc">新增多个沉浸式体验项目，带你穿越千年历史...</p>
+                            </div>
+                        </div>
+                        <div class="news-item">
+                            <span class="news-date">2024-05-20</span>
+                            <div class="news-content">
+                                <h4 class="news-title">温州雁荡山获评国家5A级景区十周年</h4>
+                                <p class="news-desc">举办系列庆祝活动，推出十周年纪念门票...</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="zyt-footer">
+        <div class="zyt-container">
+            <div class="footer-col">
+                <h4 class="footer-title">关于浙游通</h4>
+                <p>浙游通是浙江旅游官方一站式服务平台，为游客提供景点门票、酒店预订、旅游攻略等全方位服务。</p>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-title">热门城市</h4>
+                <ul class="footer-links">
+                    <li><a href="hongzhou.html">杭州</a></li>
+                    <li><a href="ningbo.html">宁波</a></li>
+                    <li><a href="shaoxing.html">绍兴</a></li>
+                    <li><a href="wengzhou.html">温州</a></li>
+                    <li><a href="zhoushann.html">舟山</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-title">联系我们</h4>
+                <p>客服热线：400-888-8888</p>
+                <p>邮箱：service@zhejiangtour.com</p>
+                <p>地址：浙江省杭州市西湖区</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 浙游通 - 浙江旅游一站式服务平台 | 浙ICP备12345678号</p>
+        </div>
+    </footer>
+
+    <!-- 视频弹窗 -->
+    <div class="video-modal-overlay" id="videoModal">
+        <button class="video-close-btn" id="videoCloseBtn">×</button>
+        <div class="video-container">
+            <video id="mainVideo" src="images/先导视频.mp4" autoplay controls muted="false" loop="false"></video>
+        </div>
+    </div>
+
+    <!-- Dify官方原生嵌入代码 适配新cpolar https域名，修复图标消失 -->
+    <script>
+    window.difyChatbotConfig = {
+        token: 'QP41RsTzEz8vphd7',
+        baseUrl: 'https://2c6a8c01.r33.cpolar.top',
+        inputs: {},
+        systemVariables: {},
+        userVariables: {},
+        hideAvatar: false,
+        showWelcome: false,
+        containerProps: {
+            style: {
+                right: '30px',
+                bottom: '30px',
+                zIndex: '99999'
+            }
+        }
+    };
+    </script>
+    <script src="https://2c6a8c01.r33.cpolar.top/embed.min.js" id="QP41RsTzEz8vphd7"></script>
+    <style>
+    #dify-chatbot-bubble-button {
+        background-color: #1C64F2 !important;
+        z-index: 99999 !important;
+    }
+    #dify-chatbot-bubble-window {
+        width: 24rem !important;
+        height: 40rem !important;
+    }
+    </style>
+
+    <script>
+        // 搜索按钮跳转城市页面
+        document.getElementById('searchBtn').addEventListener('click', function() {
+            var citySelect = document.getElementById('citySelect');
+            var cityUrl = citySelect.value;
+            if (cityUrl) {
+                window.location.href = cityUrl;
+            }
+        });
+
+        // 轮播Banner逻辑
+        var slides = document.querySelectorAll('.banner-slide');
+        var indicators = document.querySelectorAll('.banner-indicator');
+        var currentIndex = 0;
+        var slideInterval;
+
+        function showSlide(index) {
+            slides.forEach(function(slide, i) {
+                slide.classList.remove('active');
+                indicators[i].classList.remove('active');
+            });
+            slides[index].classList.add('active');
+            indicators[index].classList.add('active');
+            currentIndex = index;
+        }
+
+        function nextSlide() {
+            var nextIndex = (currentIndex + 1) % slides.length;
+            showSlide(nextIndex);
+        }
+
+        indicators.forEach(function(indicator, index) {
+            indicator.addEventListener('click', function() {
+                showSlide(index);
+                clearInterval(slideInterval);
+                slideInterval = setInterval(nextSlide, 4000);
+            });
+        });
+
+        slideInterval = setInterval(nextSlide, 4000);
+
+        // 视频弹窗逻辑
+        var videoModal = document.getElementById('videoModal');
+        var videoCloseBtn = document.getElementById('videoCloseBtn');
+        var mainVideo = document.getElementById('mainVideo');
+        var bannerBtn = document.querySelector('.banner-btn');
+
+        bannerBtn.addEventListener('click', function() {
+            videoModal.classList.add('show');
+            document.body.classList.add('no-scroll');
+            mainVideo.play();
+        });
+
+        videoCloseBtn.addEventListener('click', function() {
+            videoModal.classList.remove('show');
+            document.body.classList.remove('no-scroll');
+            mainVideo.pause();
+            mainVideo.currentTime = 0;
+        });
+
+        videoModal.addEventListener('click', function(e) {
+            if (e.target === videoModal) {
+                videoModal.classList.remove('show');
+                document.body.classList.remove('no-scroll');
+                mainVideo.pause();
+                mainVideo.currentTime = 0;
+            }
+        });
+    </script>
+</body>
+</html>
