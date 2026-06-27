@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>台州 - 山海台州</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: #F5F8FA;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: #60AFC4;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .home-link {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: background 0.3s;
+        }
+
+        .home-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: background 0.3s;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropbtn {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: background 0.3s;
+            display: inline-block;
+        }
+
+        .dropbtn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .arrow {
+            font-size: 0.7rem;
+            margin-left: 0.3rem;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            border-radius: 8px;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: #333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: background 0.3s;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .city-banner {
+            width: 100%;
+            height: 90vh;
+            min-height: 700px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .banner-slides {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .banner-slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        .banner-slide.active {
+            opacity: 1;
+        }
+
+        .banner-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            animation: bannerZoomIn 8s ease-in-out infinite;
+        }
+
+        @keyframes bannerZoomIn {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .banner-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+        }
+
+        .banner-title {
+            color: white;
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .banner-indicators {
+            position: absolute;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem;
+            z-index: 3;
+        }
+
+        .banner-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .banner-indicator.active,
+        .banner-indicator:hover {
+            background: white;
+            transform: scale(1.2);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 1.8rem;
+            color: #1565c0;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #1e88e5, #1565c0);
+            border-radius: 2px;
+        }
+
+        /* 景区卡片网格 */
+        .scenic-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            column-gap: 1.5rem;
+            row-gap: 1.8rem;
+            margin-bottom: 3rem;
+        }
+
+        .scenic-grid .city-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 400px;
+        }
+
+        .scenic-grid .city-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .scenic-grid .city-card img {
+            width: 100%;
+            height: 240px;
+            object-fit: contain;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 0.3rem;
+        }
+
+        .scenic-grid .city-card-info {
+            padding: 1rem 0 0;
+            text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .scenic-grid .city-card-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #1565c0;
+            margin-bottom: 0.8rem;
+        }
+
+        .scenic-grid .city-card-desc {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 0.8rem;
+            line-height: 1.7;
+            flex: 1;
+        }
+
+        .scenic-grid .city-card-rating {
+            color: #ff9800;
+            font-size: 0.95rem;
+        }
+
+        /* 美食和住宿卡片样式 - 与景区卡片完全统一 */
+        .food-grid, .hotel-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            column-gap: 1.5rem;
+            row-gap: 1.8rem;
+            margin-bottom: 3rem;
+        }
+
+        .food-grid .city-card,
+        .hotel-grid .city-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 400px;
+        }
+
+        .food-grid .city-card:hover,
+        .hotel-grid .city-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .food-grid .city-card img,
+        .hotel-grid .city-card img {
+            width: 100%;
+            height: 240px;
+            object-fit: contain;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 0.3rem;
+        }
+
+        .food-grid .city-card-info,
+        .hotel-grid .city-card-info {
+            padding: 1rem 0 0;
+            text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .food-grid .city-card-title,
+        .hotel-grid .city-card-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #1565c0;
+            margin-bottom: 0.8rem;
+        }
+
+        .food-grid .city-card-desc,
+        .hotel-grid .city-card-desc {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 0.8rem;
+            line-height: 1.7;
+            flex: 1;
+        }
+
+        .food-grid .city-card-rating,
+        .hotel-grid .city-card-rating {
+            color: #ff9800;
+            font-size: 0.95rem;
+        }
+
+        footer {
+            background: #60AFC4;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        footer p {
+            opacity: 0.8;
+        }
+
+        .dify-float {
+            position: fixed;
+            left: 2rem;
+            bottom: 2rem;
+            z-index: 1000;
+        }
+
+        .dify-btn {
+            width: 60px;
+            height: 60px;
+            background: #529EAF;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(82, 158, 175, 0.4);
+            transition: all 0.3s;
+        }
+
+        .dify-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(82, 158, 175, 0.5);
+        }
+
+        .dify-modal {
+            display: none;
+            position: fixed;
+            left: 90px;
+            bottom: 0;
+            width: 320px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .dify-header {
+            background: #60AFC4;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dify-close {
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .dify-body {
+            padding: 1.5rem;
+        }
+
+        .dify-body p {
+            color: #555;
+            margin-bottom: 0.5rem;
+        }
+
+        .dify-body ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .dify-body li {
+            color: #555;
+            padding: 0.3rem 0;
+        }
+
+        @media (max-width: 900px) {
+            .scenic-grid, .food-grid, .hotel-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .banner-title {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .scenic-grid, .food-grid, .hotel-grid {
+                grid-template-columns: 1fr;
+            }
+            .navbar {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            .nav-links {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <a href="index.html" class="home-link">🏠 首页</a>
+            <div class="nav-links">
+                <a href="#jingqu" class="nav-link">景区TOP推荐</a>
+                <a href="#meishi" class="nav-link">本地美食</a>
+                <a href="#zhusu" class="nav-link">住宿推荐</a>
+            </div>
+            <div class="dropdown">
+                <a class="dropbtn">📍 选择城市 <span class="arrow">▼</span></a>
+                <div class="dropdown-content">
+                    <a href="hongzhou.html">杭州</a>
+                    <a href="ningbo.html">宁波</a>
+                    <a href="wengzhou.html">温州</a>
+                    <a href="jiaxing.html">嘉兴</a>
+                    <a href="huzhou.html">湖州</a>
+                    <a href="shaoxing.html">绍兴</a>
+                    <a href="jinghua.html">金华</a>
+                    <a href="quzhou.html">衢州</a>
+                    <a href="zhoushann.html">舟山</a>
+                    <a href="taizhou.html" style="background:#1565c0;color:white">台州</a>
+                    <a href="lishui.html">丽水</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="city-banner">
+        <div class="banner-slides">
+            <div class="banner-slide active">
+                <img src="images/台州/1.jpg" alt="台州风景">
+            </div>
+            <div class="banner-slide">
+                <img src="images/台州/2.jpg" alt="台州风景">
+            </div>
+            <div class="banner-slide">
+                <img src="images/台州/3.jpg" alt="台州风景">
+            </div>
+            <div class="banner-slide">
+                <img src="images/台州/4.jpg" alt="台州风景">
+            </div>
+            <div class="banner-slide">
+                <img src="images/台州/5.jpg" alt="台州风景">
+            </div>
+        </div>
+        <div class="banner-overlay">
+            <h1 class="banner-title">台州 | 山海台州，和合圣地</h1>
+        </div>
+        <div class="banner-indicators">
+            <span class="banner-indicator active" data-index="0"></span>
+            <span class="banner-indicator" data-index="1"></span>
+            <span class="banner-indicator" data-index="2"></span>
+            <span class="banner-indicator" data-index="3"></span>
+            <span class="banner-indicator" data-index="4"></span>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2 id="jingqu" class="section-title">本市 TOP 景区</h2>
+        <div class="scenic-grid">
+            <div class="city-card">
+                <img src="images/台州/1.jpg" alt="神仙居" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">神仙居</h3>
+                    <p class="city-card-desc">国家5A级景区，以奇、险、清、幽著称，是《神雕侠侣》的取景地。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 4.8分</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/台州/2.jpg" alt="长屿硐天" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">长屿硐天</h3>
+                    <p class="city-card-desc">国家4A级景区，历经千年开采形成的硐群景观，雄伟壮观。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 4.7分</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/台州/3.jpg" alt="大鹿岛" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">大鹿岛</h3>
+                    <p class="city-card-desc">国家4A级景区，以海岛风光和岩雕艺术闻名，是休闲度假的好去处。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐ 4.5分</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/台州/4.jpg" alt="紫阳古街" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">紫阳古街</h3>
+                    <p class="city-card-desc">千年古街，保留了大量明清建筑，是台州历史文化的缩影。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐ 4.4分</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/台州/5.jpg" alt="华顶国家森林公园" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">华顶国家森林公园</h3>
+                    <p class="city-card-desc">天台山主峰，以云海、杜鹃花海闻名，是避暑胜地。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐ 4.5分</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/台州/6.jpg" alt="天湖景区" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">天湖景区</h3>
+                    <p class="city-card-desc">位于天台山上，湖水清澈，风景秀丽，是休闲观光的好去处。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐ 4.3分</p>
+                </div>
+            </div>
+        </div>
+
+        <h2 id="meishi" class="section-title">本地美食</h2>
+        <div class="food-grid">
+            <div class="city-card">
+                <img src="images/台州/7.jpg" alt="台州姜汤面" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">台州姜汤面</h3>
+                    <p class="city-card-desc">台州特色面食，以姜汤为底，配料丰富，暖胃驱寒。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 推荐指数</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/台州/8.jpg" alt="姜汁核桃调蛋" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">姜汁核桃调蛋</h3>
+                    <p class="city-card-desc">台州经典滋补甜品，姜汁搭配核桃、鸡蛋慢炖，香甜温润，秋冬驱寒暖胃。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 推荐指数</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/台州/9.jpg" alt="蛋清羊尾" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">蛋清羊尾</h3>
+                    <p class="city-card-desc">临海特色甜点，蛋清裹豆沙炸制，蓬松绵软，甜而不腻，是宴席经典小吃。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 推荐指数</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/台州/18.JPEG" alt="天台扁食" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">天台扁食</h3>
+                    <p class="city-card-desc">天台特色小吃，皮薄馅足，味道鲜美。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 推荐指数</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/台州/10.jpg" alt="食饼筒" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">食饼筒</h3>
+                    <p class="city-card-desc">台州端午传统美食，薄面皮包裹多种荤素配菜，卷制后鲜香丰富，一口满是山海风味。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 推荐指数</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/台州/11.jpg" alt="沙蒜豆面" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">沙蒜豆面</h3>
+                    <p class="city-card-desc">沿海特色硬菜，海沙蒜搭配红薯豆面焖煮，汤汁浓稠鲜香，是地道渔家风味。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 推荐指数</p>
+                </div>
+            </div>
+        </div>
+
+        <h2 id="zhusu" class="section-title">住宿推荐</h2>
+        <div class="hotel-grid">
+            <div class="city-card">
+                <img src="images/台州/12.jpg" alt="神仙居君澜度假酒店" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">神仙居君澜度假酒店</h3>
+                    <p class="city-card-desc">坐落于神仙居景区附近，环境幽雅，设施豪华。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 五星级</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/台州/13.jpg" alt="台州远洲国际大酒店" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">台州远洲国际大酒店</h3>
+                    <p class="city-card-desc">位于市中心，交通便利，设施现代舒适。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 五星级</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/台州/14.jpg" alt="台州全季酒店" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">台州全季酒店</h3>
+                    <p class="city-card-desc">简约舒适，地理位置优越，性价比高。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐ 舒适型</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/台州/15.jpg" alt="天台温泉山庄" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">天台温泉山庄</h3>
+                    <p class="city-card-desc">集温泉养生、休闲度假于一体，环境优美。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 豪华型</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/台州/16.jpg" alt="温岭石塘民宿" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">温岭石塘民宿</h3>
+                    <p class="city-card-desc">位于石塘半岛，面朝大海，体验渔家风情。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 精品民宿</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/台州/17.jpg" alt="台州亚朵酒店" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">台州亚朵酒店</h3>
+                    <p class="city-card-desc">人文主题酒店，设计简约时尚，服务贴心。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐ 舒适型</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 浙江旅游网 - 诗画浙江，山水之美</p>
+    </footer>
+
+    <div class="dify-float">
+        <button class="dify-btn" id="difyBtn">🤖</button>
+        <div class="dify-modal" id="difyModal">
+            <div class="dify-header">
+                <h3>智能旅游推荐</h3>
+                <span class="dify-close" id="difyClose">×</span>
+            </div>
+            <div class="dify-body">
+                <p>🤖 欢迎咨询智能旅游助手！</p>
+                <p>我可以为您推荐：</p>
+                <ul>
+                    <li>📍 热门景点推荐</li>
+                    <li>🍜 本地特色美食</li>
+                    <li>🏨 住宿选择建议</li>
+                    <li>🚗 出行路线规划</li>
+                </ul>
+                <p>智能体功能开发中，敬请期待！</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('.dropdown').addEventListener('mouseenter', function() {
+            document.querySelector('.dropdown-content').style.display = 'block';
+        });
+        document.querySelector('.dropdown').addEventListener('mouseleave', function() {
+            document.querySelector('.dropdown-content').style.display = 'none';
+        });
+
+        const difyBtn = document.getElementById('difyBtn');
+        const difyModal = document.getElementById('difyModal');
+        const difyClose = document.getElementById('difyClose');
+
+        difyBtn.addEventListener('click', function() {
+            difyModal.style.display = 'block';
+        });
+
+        difyClose.addEventListener('click', function() {
+            difyModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', function(e) {
+            if (e.target == difyModal) {
+                difyModal.style.display = 'none';
+            }
+        });
+
+        // Banner轮播逻辑
+        const slides = document.querySelectorAll('.banner-slide');
+        const indicators = document.querySelectorAll('.banner-indicator');
+        let currentSlide = 0;
+        let slideInterval;
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                indicators[i].classList.remove('active');
+            });
+            slides[index].classList.add('active');
+            indicators[index].classList.add('active');
+            currentSlide = index;
+        }
+
+        function nextSlide() {
+            const nextIndex = (currentSlide + 1) % slides.length;
+            showSlide(nextIndex);
+        }
+
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => {
+                showSlide(index);
+                clearInterval(slideInterval);
+                slideInterval = setInterval(nextSlide, 5000);
+            });
+        });
+
+        slideInterval = setInterval(nextSlide, 5000);
+    </script>
+</body>
+</html>

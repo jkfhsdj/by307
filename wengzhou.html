@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>温州 - 山水温州，温润之州</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        html { scroll-behavior: smooth; }
+        body { background-color: #F5F8FA; margin: 0; padding: 0; }
+        header { background: #60AFC4; padding: 1rem 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .navbar { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
+        .home-link { color: white; text-decoration: none; font-size: 1.1rem; font-weight: bold; padding: 0.5rem 1rem; border-radius: 20px; transition: background 0.3s; }
+        .home-link:hover { background: rgba(255,255,255,0.2); }
+        .nav-links { display: flex; gap: 1.5rem; }
+        .nav-link { color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 20px; transition: background 0.3s; }
+        .nav-link:hover { background: rgba(255,255,255,0.2); }
+        .dropdown { position: relative; display: inline-block; }
+        .dropbtn { color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 20px; transition: background 0.3s; display: inline-block; }
+        .dropbtn:hover { background: rgba(255,255,255,0.2); }
+        .arrow { font-size: 0.7rem; margin-left: 0.3rem; }
+        .dropdown-content { display: none; position: absolute; right: 0; background: white; min-width: 160px; box-shadow: 0 8px 16px rgba(0,0,0,0.2); border-radius: 8px; overflow: hidden; z-index: 1; }
+        .dropdown-content a { color: #333; padding: 12px 16px; text-decoration: none; display: block; transition: background 0.3s; }
+        .dropdown-content a:hover { background: #f1f1f1; }
+        .dropdown:hover .dropdown-content { display: block; }
+        .city-banner { width: 100%; height: 90vh; min-height: 700px; position: relative; overflow: hidden; }
+        .banner-slides { position: absolute; width: 100%; height: 100%; }
+        .banner-slide { position: absolute; width: 100%; height: 100%; opacity: 0; transition: opacity 0.8s ease; }
+        .banner-slide.active { opacity: 1; }
+        .banner-slide img { width: 100%; height: 100%; object-fit: cover; animation: bannerZoomIn 8s ease-in-out infinite; }
+        @keyframes bannerZoomIn { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        .banner-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 2; }
+        .banner-title { color: white; font-size: 4rem; font-weight: bold; margin-bottom: 0.5rem; text-shadow: 2px 2px 8px rgba(0,0,0,0.3); }
+        .banner-indicators { position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%); display: flex; gap: 0.5rem; z-index: 3; }
+        .banner-indicator { width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,0.5); cursor: pointer; transition: all 0.3s ease; }
+        .banner-indicator.active, .banner-indicator:hover { background: white; transform: scale(1.2); }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem 20px; }
+        .section-title { text-align: center; font-size: 1.8rem; color: #1565c0; margin-bottom: 1.5rem; position: relative; padding-bottom: 0.5rem; }
+        .section-title::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 60px; height: 3px; background: linear-gradient(90deg, #1e88e5, #1565c0); border-radius: 2px; }
+
+        /* 景区卡片网格 */
+        .scenic-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            column-gap: 1.5rem;
+            row-gap: 1.8rem;
+            margin-bottom: 3rem;
+        }
+
+        .scenic-grid .city-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 400px;
+        }
+
+        .scenic-grid .city-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .scenic-grid .city-card img {
+            width: 100%;
+            height: 240px;
+            object-fit: contain;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 0.3rem;
+        }
+
+        .scenic-grid .city-card-info {
+            padding: 1rem 0 0;
+            text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .scenic-grid .city-card-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #1565c0;
+            margin-bottom: 0.8rem;
+        }
+
+        .scenic-grid .city-card-desc {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 0.8rem;
+            line-height: 1.7;
+            flex: 1;
+        }
+
+        .scenic-grid .city-card-rating {
+            color: #ff9800;
+            font-size: 0.95rem;
+        }
+
+        /* 美食和住宿卡片样式 - 与景区卡片完全统一 */
+        .food-grid, .hotel-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            column-gap: 1.5rem;
+            row-gap: 1.8rem;
+            margin-bottom: 3rem;
+        }
+
+        .food-grid .city-card,
+        .hotel-grid .city-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 400px;
+        }
+
+        .food-grid .city-card:hover,
+        .hotel-grid .city-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .food-grid .city-card img,
+        .hotel-grid .city-card img {
+            width: 100%;
+            height: 240px;
+            object-fit: contain;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 0.3rem;
+        }
+
+        .food-grid .city-card-info,
+        .hotel-grid .city-card-info {
+            padding: 1rem 0 0;
+            text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .food-grid .city-card-title,
+        .hotel-grid .city-card-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #1565c0;
+            margin-bottom: 0.8rem;
+        }
+
+        .food-grid .city-card-desc,
+        .hotel-grid .city-card-desc {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 0.8rem;
+            line-height: 1.7;
+            flex: 1;
+        }
+
+        .food-grid .city-card-rating,
+        .hotel-grid .city-card-rating {
+            color: #ff9800;
+            font-size: 0.95rem;
+        }
+        footer { background: #60AFC4; color: white; text-align: center; padding: 2rem; margin-top: 3rem; }
+        .dify-float { position: fixed; left: 2rem; bottom: 2rem; z-index: 1000; }
+        .dify-btn { width: 60px; height: 60px; background: #529EAF; border: none; border-radius: 50%; font-size: 1.5rem; cursor: pointer; box-shadow: 0 4px 15px rgba(82,158,175,0.4); transition: all 0.3s; }
+        .dify-btn:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(82,158,175,0.5); }
+        .dify-modal { display: none; position: fixed; left: 90px; bottom: 0; width: 320px; background: white; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .dify-header { background: #60AFC4; color: white; padding: 1rem; display: flex; justify-content: space-between; align-items: center; }
+        .dify-close { font-size: 1.5rem; cursor: pointer; }
+        .dify-body { padding: 1.5rem; }
+        @media (max-width: 900px) {
+            .scenic-grid, .food-grid, .hotel-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .banner-title { font-size: 2rem; }
+        }
+        @media (max-width: 600px) {
+            .scenic-grid, .food-grid, .hotel-grid {
+                grid-template-columns: 1fr;
+            }
+            .navbar { flex-wrap: wrap; gap: 0.5rem; }
+            .nav-links { order: 3; width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <a href="index.html" class="home-link">🏠 首页</a>
+            <div class="nav-links">
+                <a href="#jingqu" class="nav-link">景区TOP推荐</a>
+                <a href="#meishi" class="nav-link">本地美食</a>
+                <a href="#zhusu" class="nav-link">住宿推荐</a>
+            </div>
+            <div class="dropdown">
+                <a class="dropbtn">📍 选择城市 <span class="arrow">▼</span></a>
+                <div class="dropdown-content">
+                    <a href="hongzhou.html">杭州</a>
+                    <a href="ningbo.html">宁波</a>
+                    <a href="wengzhou.html" style="background:#1565c0;color:white">温州</a>
+                    <a href="jiaxing.html">嘉兴</a>
+                    <a href="huzhou.html">湖州</a>
+                    <a href="shaoxing.html">绍兴</a>
+                    <a href="jinghua.html">金华</a>
+                    <a href="quzhou.html">衢州</a>
+                    <a href="zhoushann.html">舟山</a>
+                    <a href="taizhou.html">台州</a>
+                    <a href="lishui.html">丽水</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="city-banner">
+        <div class="banner-slides">
+            <div class="banner-slide active">
+                <img src="images/温州/2.jpg" alt="温州风景1">
+            </div>
+            <div class="banner-slide">
+                <img src="images/温州/3.jpg" alt="温州风景2">
+            </div>
+            <div class="banner-slide">
+                <img src="images/温州/4百丈漈.jpg" alt="百丈漈">
+            </div>
+            <div class="banner-slide">
+                <img src="images/温州/5.jpg" alt="温州风景3">
+            </div>
+            <div class="banner-slide">
+                <img src="images/温州/7雁荡山.jpg" alt="雁荡山">
+            </div>
+        </div>
+        <div class="banner-overlay">
+            <h1 class="banner-title">温州 | 山水温州，温润之州</h1>
+        </div>
+        <div class="banner-indicators">
+            <span class="banner-indicator active" data-index="0"></span>
+            <span class="banner-indicator" data-index="1"></span>
+            <span class="banner-indicator" data-index="2"></span>
+            <span class="banner-indicator" data-index="3"></span>
+            <span class="banner-indicator" data-index="4"></span>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2 id="jingqu" class="section-title">本市 TOP 景区</h2>
+        <div class="scenic-grid">
+            <div class="city-card"><img src="images/温州/7雁荡山.jpg" alt="雁荡山" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">雁荡山</h3><p class="city-card-desc">世界地质公园，奇峰怪石、飞泉瀑布遍布，被誉为海上名山、寰中绝胜。</p><p class="city-card-rating">⭐⭐⭐⭐⭐ 4.9分</p></div></div>
+            <div class="city-card"><img src="images/温州/1楠溪江.jpg" alt="楠溪江" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">楠溪江</h3><p class="city-card-desc">国家级山水风景区，溪滩平缓古村错落，山水田园风光独具江南韵味。</p><p class="city-card-rating">⭐⭐⭐⭐⭐ 4.7分</p></div></div>
+            <div class="city-card"><img src="images/温州/13三垟湿地.jpg" alt="三垟湿地" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">三垟湿地</h3><p class="city-card-desc">城市内天然水乡湿地，河道纵横、绿植繁茂，是休闲观鸟、亲近自然的好去处。</p><p class="city-card-rating">⭐⭐⭐⭐ 4.6分</p></div></div>
+            <div class="city-card"><img src="images/温州/16洞头岛.jpg" alt="洞头岛" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">洞头岛</h3><p class="city-card-desc">温州百岛之县，海岛海岸风光秀丽，沙滩礁石相映，适合海岛度假。</p><p class="city-card-rating">⭐⭐⭐⭐ 4.5分</p></div></div>
+            <div class="city-card"><img src="images/温州/4百丈漈.jpg" alt="百丈漈" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">百丈漈</h3><p class="city-card-desc">国内罕见阶梯式大瀑布，三级瀑布落差超350米，水流磅礴气势震撼。</p><p class="city-card-rating">⭐⭐⭐⭐⭐ 4.8分</p></div></div>
+            <div class="city-card"><img src="images/温州/10南麂岛.jpg" alt="南麂岛" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">南麂岛</h3><p class="city-card-desc">国家级海洋自然保护区，碧海细沙，海鲜资源丰富，是小众滨海度假胜地。</p><p class="city-card-rating">⭐⭐⭐⭐ 4.3分</p></div></div>
+        </div>
+
+        <h2 id="meishi" class="section-title">本地美食</h2>
+        <div class="food-grid">
+            <div class="city-card"><img src="images/温州/20.jpg" alt="温州糯米饭" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">温州糯米饭</h3><p class="city-card-desc">温州国民早餐，软糯米饭搭配肉末油条碎与肉汤，香气浓郁、口感丰富。</p><p class="city-card-rating">⭐⭐⭐⭐⭐ 推荐指数</p></div></div>
+            <div class="city-card"><img src="images/温州/21.jpg" alt="温州鱼圆" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">温州鱼圆</h3><p class="city-card-desc">选用鲜活海鱼手工捶制，鱼丸Q弹滑嫩，清汤鲜甜，是温州经典家常小吃。</p><p class="city-card-rating">⭐⭐⭐⭐⭐ 推荐指数</p></div></div>
+            <div class="city-card"><img src="images/温州/18.jpg" alt="灯盏糕" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">灯盏糕</h3><p class="city-card-desc">温州街头特色油炸小吃，外皮酥脆，内裹萝卜丝与鲜肉，咸香十足。</p><p class="city-card-rating">⭐⭐⭐⭐⭐ 推荐指数</p></div></div>
+            <div class="city-card"><img src="images/温州/17.jpg" alt="江蟹生" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">江蟹生</h3><p class="city-card-desc">温州特色生腌海鲜，蟹肉鲜嫩入味，鲜中带辣，是本地宴席必备冷菜。</p><p class="city-card-rating">⭐⭐⭐⭐⭐ 推荐指数</p></div></div>
+            <div class="city-card"><img src="images/温州/19.jpg" alt="三丝敲鱼" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">三丝敲鱼</h3><p class="city-card-desc">温州传统名菜，鱼肉薄透搭配火腿、香菇、青菜三丝，汤汁清爽鲜美。</p><p class="city-card-rating">⭐⭐⭐⭐⭐ 推荐指数</p></div></div>
+            <div class="city-card"><img src="images/温州/22.jpg" alt="九层糕" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">九层糕</h3><p class="city-card-desc">分层米制甜糕，口感软糯清甜，层次分明，是温州传统特色甜品。</p><p class="city-card-rating">⭐⭐⭐⭐⭐ 推荐指数</p></div></div>
+        </div>
+
+        <h2 id="zhusu" class="section-title">住宿推荐</h2>
+        <div class="hotel-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;">
+            <div class="city-card"><img src="images/温州/23.jpg" alt="温州香格里拉大酒店" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">温州香格里拉大酒店</h3><p class="city-card-desc">坐落温州城市核心商圈，配套高端休闲设施，全景落地窗可俯瞰城市风光，商务出行优选。</p><p class="city-card-rating">⭐⭐⭐⭐⭐ 豪华型</p></div></div>
+            <div class="city-card"><img src="images/温州/24.jpg" alt="温州威斯汀酒店" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">温州威斯汀酒店</h3><p class="city-card-desc">现代轻奢设计风格，配备专业健身中心与恒温泳池，出行便捷，兼顾休闲与商旅需求。</p><p class="city-card-rating">⭐⭐⭐⭐⭐ 豪华型</p></div></div>
+            <div class="city-card"><img src="images/温州/25.jpg" alt="温州万豪酒店" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">温州万豪酒店</h3><p class="city-card-desc">紧邻城市商业中心，客房宽敞雅致，配套中西式餐厅，服务贴心周到。</p><p class="city-card-rating">⭐⭐⭐⭐⭐ 豪华型</p></div></div>
+
+        </div>
+    </div>
+
+    <footer><p>&copy; 2024 浙江旅游网 - 诗画浙江，山水之美</p></footer>
+
+    <div class="dify-float"><button class="dify-btn" id="difyBtn">🤖</button><div class="dify-modal" id="difyModal"><div class="dify-header"><h3>智能旅游推荐</h3><span class="dify-close" id="difyClose">×</span></div><div class="dify-body"><p>🤖 欢迎咨询智能旅游助手！</p><p>我可以为您推荐：</p><ul><li>📍 热门景点推荐</li><li>🍜 本地特色美食</li><li>🏨 住宿选择建议</li><li>🚗 出行路线规划</li></ul><p>智能体功能开发中，敬请期待！</p></div></div></div>
+
+    <script>
+        // 轮播图自动切换
+        const slides = document.querySelectorAll('.banner-slide');
+        const indicators = document.querySelectorAll('.banner-indicator');
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            indicators.forEach(indicator => indicator.classList.remove('active'));
+            slides[index].classList.add('active');
+            indicators[index].classList.add('active');
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            showSlide(currentSlide);
+        }
+
+        // 自动轮播，每5秒切换
+        setInterval(nextSlide, 5000);
+
+        // 点击指示器切换
+        indicators.forEach(indicator => {
+            indicator.addEventListener('click', () => {
+                const index = parseInt(indicator.getAttribute('data-index'));
+                currentSlide = index;
+                showSlide(index);
+            });
+        });
+
+        const difyBtn = document.getElementById('difyBtn');
+        const difyModal = document.getElementById('difyModal');
+        const difyClose = document.getElementById('difyClose');
+        difyBtn.addEventListener('click', () => { difyModal.style.display = 'block'; });
+        difyClose.addEventListener('click', () => { difyModal.style.display = 'none'; });
+        window.addEventListener('click', (e) => { if (e.target == difyModal) difyModal.style.display = 'none'; });
+    </script>
+</body>
+</html>

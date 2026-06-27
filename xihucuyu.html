@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>西湖醋鱼 - 杭州美食</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background-color: #F5F8FA;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            background-color: #60AFC4;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar-city {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .navbar-city:hover {
+            opacity: 0.8;
+        }
+
+        .navbar-dropdown {
+            position: relative;
+        }
+
+        .dropdown-select {
+            padding: 0.5rem 2rem 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: white;
+            color: #333;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            min-width: 140px;
+        }
+
+        .dropdown-select option {
+            background-color: white;
+            color: #333;
+        }
+
+        .navbar-dropdown::after {
+            content: '▼';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #60AFC4;
+            font-size: 0.6rem;
+            pointer-events: none;
+        }
+
+        /* 面包屑导航 */
+        .breadcrumb {
+            padding: 1rem 2rem;
+            background: #f5f5f5;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .breadcrumb a {
+            color: #60AFC4;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* 返回按钮 */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            background: #529EAF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+            margin-bottom: 1.5rem;
+        }
+
+        .back-btn:hover {
+            background: #428899;
+        }
+
+        /* 主体内容区域 */
+        .container {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 景区标题 */
+        .detail-title-wrap {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .detail-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #60AFC4;
+            margin-bottom: 0.8rem;
+        }
+
+        .detail-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: #60AFC4;
+            margin: 1rem auto 0;
+        }
+
+        .detail-subtitle {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        /* 详情主图区域 */
+        .detail-main {
+            display: flex;
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+            align-items: flex-start;
+        }
+
+        .detail-image {
+            flex-shrink: 0;
+            max-width: 420px;
+            width: 100%;
+        }
+
+        .detail-image img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .detail-content {
+            flex: 1;
+        }
+
+        .detail-content h2 {
+            color: #60AFC4;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .detail-content h2::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 2px;
+            background: #60AFC4;
+            margin: 0.5rem auto 0;
+        }
+
+        .detail-content p {
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        /* 详情信息 */
+        .detail-info {
+            margin-top: 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            font-size: 0.95rem;
+            color: #555;
+            justify-content: center;
+        }
+
+        /* 标签栏 */
+        .tags-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .tag-item {
+            padding: 0.6rem 1.2rem;
+            background: #E8F4F8;
+            color: #60AFC4;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* 小景点网格 */
+        .detail-section-title {
+            text-align: center;
+            color: #60AFC4;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-section-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background: #60AFC4;
+            margin: 0.8rem auto 1.5rem;
+        }
+
+        .spots-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.8rem;
+            margin-top: 1rem;
+        }
+
+        .spot-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .spot-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .spot-card img {
+            width: 100%;
+            height: 230px;
+            object-fit: cover;
+            display: block;
+            border-top-left-radius: inherit;
+            border-top-right-radius: inherit;
+            flex-shrink: 0;
+        }
+
+        .spot-name {
+            padding: 1rem;
+            text-align: center;
+            font-weight: bold;
+            color: #60AFC4;
+            font-size: 1rem;
+            background: white;
+        }
+
+        /* 页脚样式 */
+        footer {
+            background-color: #60AFC4;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        footer p {
+            opacity: 0.8;
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 900px) {
+            .navbar {
+                gap: 1.5rem;
+                padding: 1rem;
+            }
+
+            .container {
+                padding: 1.2rem;
+            }
+
+            .detail-main {
+                flex-direction: column;
+            }
+
+            .detail-image {
+                max-width: 100%;
+            }
+
+            .detail-image img {
+                height: 240px;
+            }
+
+            .spots-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.2rem;
+            }
+
+            .detail-title {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .spots-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-image img {
+                height: 200px;
+            }
+
+            .detail-title {
+                font-size: 1.6rem;
+            }
+
+            .breadcrumb {
+                padding: 0.8rem 1rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <header>
+        <div class="navbar">
+            <a href="hongzhou.html" class="navbar-city">杭州</a>
+            <div class="navbar-dropdown">
+                <select id="citySelect" class="dropdown-select">
+                    <option value="xihucuyu.html" selected>选择城市</option>
+                    <option value="hongzhou.html">杭州市</option>
+                    <option value="ningbo.html">宁波市</option>
+                    <option value="wengzhou.html">温州市</option>
+                    <option value="jiaxing.html">嘉兴市</option>
+                    <option value="huzhou.html">湖州市</option>
+                    <option value="shaoxing.html">绍兴市</option>
+                    <option value="jinghua.html">金华市</option>
+                    <option value="quzhou.html">衢州市</option>
+                    <option value="zhoushann.html">舟山市</option>
+                    <option value="taizhou.html">台州市</option>
+                    <option value="lishui.html">丽水市</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <!-- 面包屑导航 -->
+    <div class="breadcrumb">
+        <a href="index.html">首页</a> > <a href="hongzhou.html">杭州</a> > <a href="#">美食</a> > 西湖醋鱼
+    </div>
+
+    <!-- 主内容区域 -->
+    <div class="container">
+        <!-- 返回按钮 -->
+        <button class="back-btn" onclick="window.history.back()">← 返回</button>
+
+        <!-- 标题 -->
+        <div class="detail-title-wrap">
+            <h1 class="detail-title">西湖醋鱼</h1>
+            <p class="detail-subtitle">杭帮菜头牌名菜 | 杭州标志性美食 | 八百年历史传承</p>
+        </div>
+
+        <!-- 标签栏 -->
+        <div class="tags-bar">
+            <span class="tag-item">杭帮菜</span>
+            <span class="tag-item">百年名菜</span>
+            <span class="tag-item">酸甜口</span>
+        </div>
+
+        <!-- 左图右文区域 -->
+        <div class="detail-main">
+            <div class="detail-image">
+                <img src="images/杭州/19.webp" alt="西湖醋鱼">
+            </div>
+            <div class="detail-content">
+                <h2>一、基础定位</h2>
+                <p>西湖醋鱼是浙菜杭帮菜头牌名菜，杭州标志性美食，别名叔嫂传珍，拥有八百余年历史，前身是南宋名点宋嫂鱼羹，自古便是西湖宴席必上菜，楼外楼、知味观等老字号为代表店家。</p>
+            </div>
+        </div>
+
+        <!-- 民间传说 -->
+        <h2 class="detail-section-title">二、民间传说：叔嫂传珍</h2>
+        <div class="detail-content" style="margin-bottom: 3rem;">
+            <p>相传西湖边宋氏兄弟以打鱼为生，兄长被当地恶霸害死，叔嫂二人赴官府告状反遭迫害，被迫分离。临行前嫂嫂用西湖草鱼，加糖、米醋烧制一碗酸甜鱼给小叔，寓意 "苦尽甜来、勿忘辛酸"。多年后小叔功成名就，凭这道醋鱼的独特味道寻回嫂嫂，这道菜也因此得名 "叔嫂传珍"，流传至今。</p>
+        </div>
+
+        <!-- 选材与制作特色 -->
+        <h2 class="detail-section-title">三、选材与制作特色</h2>
+        <div class="detail-content" style="margin-bottom: 3rem;">
+            <p><strong>原料讲究</strong></p>
+            <p>选用鲜活草鱼，烹制前需饿养 2-3 天，让鱼吐净泥沙，去除土腥味；标准鱼重约 700 克，肉质细嫩紧实。</p>
+            <p><strong>独特做法（无油炸）</strong></p>
+            <p>刀工：鱼身剖开分两片，标准 "七刀半"，刀口均匀不破鱼皮；<br>熟制：清水沸水汆烫断生，仅 3 分钟左右，最大限度保留鱼肉鲜嫩；<br>糖醋汁：本地米醋、白糖、酱油、绍酒、湿淀粉调配，薄芡透亮，撒姜末提香；<br>口味先酸后甜、酸香为主，不厚重腻口，上品醋鱼细品自带蟹鲜风味。</p>
+            <p><strong>成品特点</strong></p>
+            <p>鱼形完整、鱼鳍挺立，红亮酱汁平铺鱼身，鱼肉滑嫩不散，醋香浓郁，突出湖鱼本鲜。</p>
+        </div>
+
+        <!-- 历史文化渊源 -->
+        <h2 class="detail-section-title">四、历史文化渊源</h2>
+        <div class="detail-content" style="margin-bottom: 3rem;">
+            <p>南宋定都临安（杭州），民间厨娘宋五嫂创制鱼羹，宋高宗品尝后大加赞赏，鱼鲜醋烹的做法风靡西湖市井；后世改良为干汁醋鱼，褪去羹汤，形成如今西湖醋鱼样式。古代螃蟹珍贵，百姓便以这道醋鱼替代蟹鲜，是平民美食登上大雅之堂的代表菜品，也是西湖人文与饮食结合的经典符号。</p>
+        </div>
+
+        <!-- 风味品鉴 -->
+        <h2 class="detail-section-title">五、风味品鉴</h2>
+        <div class="detail-content">
+            <p>区别于北方厚重糖醋鱼，西湖醋鱼属于清淡文人菜，酸甜柔和、不掩盖鱼肉原味；传统吃法小口品尝鱼肉，搭配龙井茶、杭式点心中和酸味，是游览西湖必尝特色佳肴。</p>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <p>&copy; 2024 浙江旅游网 - 诗画浙江，山水之美</p>
+    </footer>
+
+    <script>
+        // 城市下拉切换
+        document.getElementById('citySelect').addEventListener('change', function() {
+            var cityUrl = this.value;
+            if (cityUrl && cityUrl !== 'xihucuyu.html') {
+                window.location.href = cityUrl;
+            }
+        });
+    </script>
+
+</body>
+</html>
