@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>嘉兴 - 红船启航地，江南水乡</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        html { scroll-behavior: smooth; }
+        body { background-color: #F5F8FA; margin: 0; padding: 0; }
+        header { background: #60AFC4; padding: 1rem 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .navbar { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
+        .home-link { color: white; text-decoration: none; font-size: 1.1rem; font-weight: bold; padding: 0.5rem 1rem; border-radius: 20px; transition: background 0.3s; }
+        .home-link:hover { background: rgba(255,255,255,0.2); }
+        .nav-links { display: flex; gap: 1.5rem; }
+        .nav-link { color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 20px; transition: background 0.3s; }
+        .nav-link:hover { background: rgba(255,255,255,0.2); }
+        .dropdown { position: relative; display: inline-block; }
+        .dropbtn { color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 20px; transition: background 0.3s; display: inline-block; }
+        .dropbtn:hover { background: rgba(255,255,255,0.2); }
+        .arrow { font-size: 0.7rem; margin-left: 0.3rem; }
+        .dropdown-content { display: none; position: absolute; right: 0; background: white; min-width: 160px; box-shadow: 0 8px 16px rgba(0,0,0,0.2); border-radius: 8px; overflow: hidden; z-index: 1; }
+        .dropdown-content a { color: #333; padding: 12px 16px; text-decoration: none; display: block; transition: background 0.3s; }
+        .dropdown-content a:hover { background: #f1f1f1; }
+        .dropdown:hover .dropdown-content { display: block; }
+        .city-banner { width: 100%; height: 90vh; min-height: 700px; position: relative; overflow: hidden; }
+        .banner-slides { position: absolute; width: 100%; height: 100%; }
+        .banner-slide { position: absolute; width: 100%; height: 100%; opacity: 0; transition: opacity 0.8s ease; }
+        .banner-slide.active { opacity: 1; }
+        .banner-slide img { width: 100%; height: 100%; object-fit: cover; animation: bannerZoomIn 8s ease-in-out infinite; }
+        @keyframes bannerZoomIn { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        .banner-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 2; }
+        .banner-title { color: white; font-size: 4rem; font-weight: bold; margin-bottom: 0.5rem; text-shadow: 2px 2px 8px rgba(0,0,0,0.3); }
+        .banner-indicators { position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%); display: flex; gap: 0.5rem; z-index: 3; }
+        .banner-indicator { width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,0.5); cursor: pointer; transition: all 0.3s ease; }
+        .banner-indicator.active, .banner-indicator:hover { background: white; transform: scale(1.2); }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem 20px; }
+        .section-title { text-align: center; font-size: 1.8rem; color: #1565c0; margin-bottom: 1.5rem; position: relative; padding-bottom: 0.5rem; }
+        .section-title::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 60px; height: 3px; background: linear-gradient(90deg, #1e88e5, #1565c0); border-radius: 2px; }
+
+        /* 景区卡片网格 */
+        .scenic-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            column-gap: 1.5rem;
+            row-gap: 1.8rem;
+            margin-bottom: 3rem;
+        }
+
+        .scenic-grid .city-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 400px;
+        }
+
+        .scenic-grid .city-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .scenic-grid .city-card img {
+            width: 100%;
+            height: 240px;
+            object-fit: contain;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 0.3rem;
+        }
+
+        .scenic-grid .city-card-info {
+            padding: 1rem 0 0;
+            text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .scenic-grid .city-card-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #1565c0;
+            margin-bottom: 0.8rem;
+        }
+
+        .scenic-grid .city-card-desc {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 0.8rem;
+            line-height: 1.7;
+            flex: 1;
+        }
+
+        .scenic-grid .city-card-rating {
+            color: #ff9800;
+            font-size: 0.95rem;
+        }
+
+        /* 美食和住宿卡片样式 - 与景区卡片完全统一 */
+        .food-grid, .hotel-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            column-gap: 1.5rem;
+            row-gap: 1.8rem;
+            margin-bottom: 3rem;
+        }
+
+        .food-grid .city-card,
+        .hotel-grid .city-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 400px;
+        }
+
+        .food-grid .city-card:hover,
+        .hotel-grid .city-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .food-grid .city-card img,
+        .hotel-grid .city-card img {
+            width: 100%;
+            height: 240px;
+            object-fit: contain;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 0.3rem;
+        }
+
+        .food-grid .city-card-info,
+        .hotel-grid .city-card-info {
+            padding: 1rem 0 0;
+            text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .food-grid .city-card-title,
+        .hotel-grid .city-card-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #1565c0;
+            margin-bottom: 0.8rem;
+        }
+
+        .food-grid .city-card-desc,
+        .hotel-grid .city-card-desc {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 0.8rem;
+            line-height: 1.7;
+            flex: 1;
+        }
+
+        .food-grid .city-card-rating,
+        .hotel-grid .city-card-rating {
+            color: #ff9800;
+            font-size: 0.95rem;
+        }
+        footer { background: #60AFC4; color: white; text-align: center; padding: 2rem; margin-top: 3rem; }
+        .dify-float { position: fixed; left: 2rem; bottom: 2rem; z-index: 1000; }
+        .dify-btn { width: 60px; height: 60px; background: #529EAF; border: none; border-radius: 50%; font-size: 1.5rem; cursor: pointer; box-shadow: 0 4px 15px rgba(82,158,175,0.4); transition: all 0.3s; }
+        .dify-btn:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(82,158,175,0.5); }
+        .dify-modal { display: none; position: fixed; left: 90px; bottom: 0; width: 320px; background: white; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .dify-header { background: #60AFC4; color: white; padding: 1rem; display: flex; justify-content: space-between; align-items: center; }
+        .dify-close { font-size: 1.5rem; cursor: pointer; }
+        .dify-body { padding: 1.5rem; }
+        @media (max-width: 900px) {
+            .scenic-grid, .food-grid, .hotel-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .banner-title { font-size: 2rem; }
+        }
+        @media (max-width: 600px) {
+            .scenic-grid, .food-grid, .hotel-grid {
+                grid-template-columns: 1fr;
+            }
+            .navbar { flex-wrap: wrap; gap: 0.5rem; }
+            .nav-links { order: 3; width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <a href="index.html" class="home-link">🏠 首页</a>
+            <div class="nav-links">
+                <a href="#jingqu" class="nav-link">景区TOP推荐</a>
+                <a href="#meishi" class="nav-link">本地美食</a>
+                <a href="#zhusu" class="nav-link">住宿推荐</a>
+            </div>
+            <div class="dropdown">
+                <a class="dropbtn">📍 选择城市 <span class="arrow">▼</span></a>
+                <div class="dropdown-content">
+                    <a href="hongzhou.html">杭州</a>
+                    <a href="ningbo.html">宁波</a>
+                    <a href="wengzhou.html">温州</a>
+                    <a href="jiaxing.html" style="background:#1565c0;color:white">嘉兴</a>
+                    <a href="huzhou.html">湖州</a>
+                    <a href="shaoxing.html">绍兴</a>
+                    <a href="jinghua.html">金华</a>
+                    <a href="quzhou.html">衢州</a>
+                    <a href="zhoushann.html">舟山</a>
+                    <a href="taizhou.html">台州</a>
+                    <a href="lishui.html">丽水</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="city-banner">
+        <div class="banner-slides">
+            <div class="banner-slide active"><img src="images/嘉兴/九龙山.jpg" alt="九龙山" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+            <div class="banner-slide"><img src="images/嘉兴/南湖1.jpg" alt="南湖" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+            <div class="banner-slide"><img src="images/嘉兴/南湖2.jpg" alt="南湖" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+            <div class="banner-slide"><img src="images/嘉兴/乌镇3.jpg" alt="乌镇" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+            <div class="banner-slide"><img src="images/嘉兴/乌镇4.jpg" alt="乌镇" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+        </div>
+        <div class="banner-overlay">
+            <h1 class="banner-title">嘉兴 | 红船启航地，江南水乡</h1>
+        </div>
+        <div class="banner-indicators">
+            <span class="banner-indicator active"></span>
+            <span class="banner-indicator"></span>
+            <span class="banner-indicator"></span>
+            <span class="banner-indicator"></span>
+            <span class="banner-indicator"></span>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2 id="jingqu" class="section-title">本市 TOP 景区</h2>
+        <div class="scenic-grid">
+            <div class="city-card"><img src="images/嘉兴/乌镇6.jpg" alt="乌镇" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">乌镇</h3><p class="city-card-desc">江南六大古镇之一，保存完好的明清建筑群与水乡石桥交相辉映，展现典雅的吴越文化底蕴。</p><p class="city-card-rating">⭐⭐⭐⭐⭐ 4.9分</p></div></div>
+            <div class="city-card"><img src="images/嘉兴/南湖3.jpg" alt="南湖" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">南湖</h3><p class="city-card-desc">嘉兴城市核心湖泊，湖光秀丽，沿岸绿地与人文景观相融，是体验江南水乡风情的好去处。</p><p class="city-card-rating">⭐⭐⭐⭐⭐ 4.7分</p></div></div>
+            <div class="city-card"><img src="images/嘉兴/九龙山.jpg" alt="九龙山" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">九龙山</h3><p class="city-card-desc">滨海山地度假区，山海相依风光开阔，兼具自然观景与休闲游乐，是嘉兴小众滨海游玩目的地。</p><p class="city-card-rating">⭐⭐⭐⭐⭐ 4.8分</p></div></div>
+            <div class="city-card"><img src="images/嘉兴/西塘.jpg" alt="西塘" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">西塘</h3><p class="city-card-desc">千年水乡古镇，河道纵横、古桥错落，保留着浓郁的江南生活气息，适合慢游拍照。</p><p class="city-card-rating">⭐⭐⭐⭐ 4.6分</p></div></div>
+            <div class="city-card"><img src="images/嘉兴/南北湖.jpg" alt="南北湖" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">南北湖</h3><p class="city-card-desc">国内罕见山、海、湖共生景区，湖湾静谧、山林葱郁，一步一景兼具山海双重风光。</p><p class="city-card-rating">⭐⭐⭐⭐ 4.5分</p></div></div>
+            <div class="city-card"><img src="images/嘉兴/子城遗址公园.jpg" alt="子城遗址公园" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">子城遗址公园</h3><p class="city-card-desc">展现嘉兴古城历史脉络的城市遗址公园，保留古城墙与历史遗存，兼具文化探访与休闲散步功能。</p><p class="city-card-rating">⭐⭐⭐⭐ 4.4分</p></div></div>
+        </div>
+
+        <h2 id="meishi" class="section-title">本地美食</h2>
+        <div class="food-grid">
+            <div class="city-card"><img src="images/嘉兴/嘉兴粽子.jpg" alt="嘉兴粽子" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">嘉兴粽子</h3><p class="city-card-desc">嘉兴传统特色小吃，糯米软糯、馅料丰富，鲜肉与蛋黄口味最具代表性，是本地美食名片。</p><p class="city-card-rating">⭐⭐⭐⭐⭐ 推荐指数</p></div></div>
+            <div class="city-card"><img src="images/嘉兴/臭豆腐.jpg" alt="嘉兴臭豆腐" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">嘉兴臭豆腐</h3><p class="city-card-desc">外酥里嫩的地方风味小吃，搭配特制酱料食用，口感香鲜，是嘉兴街头常见特色美食。</p><p class="city-card-rating">⭐⭐⭐⭐ 推荐指数</p></div></div>
+            <div class="city-card"><img src="images/嘉兴/南湖菱.jpg" alt="菱肉焖米饭" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">菱肉焖米饭</h3><p class="city-card-desc">利用南湖菱肉烹制的乡土主食，米饭香软，菱肉清甜，带有鲜明的江南水乡风味。</p><p class="city-card-rating">⭐⭐⭐⭐ 推荐指数</p></div></div>
+            <div class="city-card"><img src="images/嘉兴/太湖蟹.jpg" alt="太湖蟹" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">太湖蟹</h3><p class="city-card-desc">太湖周边知名水产，蟹肉饱满鲜甜，蟹黄醇厚，是秋季来嘉兴不可错过的美味。</p><p class="city-card-rating">⭐⭐⭐⭐⭐ 推荐指数</p></div></div>
+            <div class="city-card"><img src="images/嘉兴/1.jpg" alt="酥羊大面" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">酥羊大面</h3><p class="city-card-desc">嘉兴传统面食之一，羊肉酥烂入味，面条筋道，汤汁浓郁鲜香，是本地人心目中的经典早餐。</p><p class="city-card-rating">⭐⭐⭐⭐ 推荐指数</p></div></div>
+            <div class="city-card"><img src="images/嘉兴/2.jpg" alt="乌镇姑嫂饼" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">乌镇姑嫂饼</h3><p class="city-card-desc">乌镇传统糕点，饼皮薄酥，内馅香甜，口感细腻微脆，是兼具历史传说与江南风味的特色点心。</p><p class="city-card-rating">⭐⭐⭐⭐ 推荐指数</p></div></div>
+        </div>
+
+        <h2 id="zhusu" class="section-title">住宿推荐</h2>
+        <div class="hotel-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;">
+            <div class="city-card"><img src="images/嘉兴/嘉兴月河客栈.jpg" alt="嘉兴月河客栈" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">嘉兴月河客栈</h3><p class="city-card-desc">坐落月河历史街区内，白墙黛瓦江南庭院风格，推窗即见古桥流水，沉浸式感受水乡慢生活。</p><p class="city-card-rating">⭐⭐⭐⭐⭐ 豪华型</p></div></div>
+            <div class="city-card"><img src="images/嘉兴/如家酒店.jpg" alt="如家酒店" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">如家酒店</h3><p class="city-card-desc">高性价比连锁商旅酒店，门店地处城区交通要道，客房干净简约，配套基础休闲设施。</p><p class="city-card-rating">⭐⭐⭐⭐ 舒适型</p></div></div>
+            <div class="city-card"><img src="images/嘉兴/嘉兴万豪酒店.jpg" alt="嘉兴万豪" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">嘉兴万豪</h3><p class="city-card-desc">国际高端商务酒店，紧邻城市商圈，配套宴会厅、中西餐厅，商务出行与团建优选。</p><p class="city-card-rating">⭐⭐⭐⭐⭐ 豪华型</p></div></div>
+        </div>
+    </div>
+
+    <footer><p>&copy; 2024 浙江旅游网 - 诗画浙江，山水之美</p></footer>
+
+    <div class="dify-float"><button class="dify-btn" id="difyBtn">🤖</button><div class="dify-modal" id="difyModal"><div class="dify-header"><h3>智能旅游推荐</h3><span class="dify-close" id="difyClose">×</span></div><div class="dify-body"><p>🤖 欢迎咨询智能旅游助手！</p><p>我可以为您推荐：</p><ul><li>📍 热门景点推荐</li><li>🍜 本地特色美食</li><li>🏨 住宿选择建议</li><li>🚗 出行路线规划</li></ul><p>智能体功能开发中，敬请期待！</p></div></div></div>
+
+    <script>
+        // 轮播图自动切换
+        const slides = document.querySelectorAll('.banner-slide');
+        const indicators = document.querySelectorAll('.banner-indicator');
+        let currentSlide = 0;
+        
+        function nextSlide() {
+            slides[currentSlide].classList.remove('active');
+            indicators[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+            indicators[currentSlide].classList.add('active');
+        }
+        
+        function goToSlide(index) {
+            slides[currentSlide].classList.remove('active');
+            indicators[currentSlide].classList.remove('active');
+            currentSlide = index;
+            slides[currentSlide].classList.add('active');
+            indicators[currentSlide].classList.add('active');
+        }
+        
+        // 点击指示器切换
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => goToSlide(index));
+        });
+        
+        // 自动轮播
+        setInterval(nextSlide, 5000);
+        
+        const difyBtn = document.getElementById('difyBtn');
+        const difyModal = document.getElementById('difyModal');
+        const difyClose = document.getElementById('difyClose');
+        difyBtn.addEventListener('click', () => { difyModal.style.display = 'block'; });
+        difyClose.addEventListener('click', () => { difyModal.style.display = 'none'; });
+        window.addEventListener('click', (e) => { if (e.target == difyModal) difyModal.style.display = 'none'; });
+    </script>
+</body>
+</html>

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>千岛湖 - 杭州旅游</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background-color: #F5F8FA;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            background-color: #60AFC4;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar-city {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .navbar-city:hover {
+            opacity: 0.8;
+        }
+
+        .navbar-dropdown {
+            position: relative;
+        }
+
+        .dropdown-select {
+            padding: 0.5rem 2rem 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: white;
+            color: #333;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            min-width: 140px;
+        }
+
+        .dropdown-select option {
+            background-color: white;
+            color: #333;
+        }
+
+        .navbar-dropdown::after {
+            content: '▼';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #60AFC4;
+            font-size: 0.6rem;
+            pointer-events: none;
+        }
+
+        /* 面包屑导航 */
+        .breadcrumb {
+            padding: 1rem 2rem;
+            background: #f5f5f5;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .breadcrumb a {
+            color: #60AFC4;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* 返回按钮 */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            background: #529EAF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+            margin-bottom: 1.5rem;
+        }
+
+        .back-btn:hover {
+            background: #428899;
+        }
+
+        /* 主体内容区域 */
+        .container {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 景区标题 */
+        .detail-title-wrap {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .detail-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #60AFC4;
+            margin-bottom: 0.8rem;
+        }
+
+        .detail-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: #60AFC4;
+            margin: 1rem auto 0;
+        }
+
+        .detail-subtitle {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        /* 详情主图区域 */
+        .detail-main {
+            display: flex;
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+            align-items: flex-start;
+        }
+
+        .detail-image {
+            flex-shrink: 0;
+            max-width: 420px;
+            width: 100%;
+        }
+
+        .detail-image img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .detail-content {
+            flex: 1;
+        }
+
+        .detail-content h2 {
+            color: #60AFC4;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .detail-content h2::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 2px;
+            background: #60AFC4;
+            margin: 0.5rem auto 0;
+        }
+
+        .detail-content p {
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        /* 详情信息 */
+        .detail-info {
+            margin-top: 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            font-size: 0.95rem;
+            color: #555;
+            justify-content: center;
+        }
+
+        /* 标签栏 */
+        .tags-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .tag-item {
+            padding: 0.6rem 1.2rem;
+            background: #E8F4F8;
+            color: #60AFC4;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* 小景点网格 */
+        .detail-section-title {
+            text-align: center;
+            color: #60AFC4;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-section-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background: #60AFC4;
+            margin: 0.8rem auto 1.5rem;
+        }
+
+        .spots-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.8rem;
+            margin-top: 1rem;
+        }
+
+        .spot-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .spot-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .spot-card img {
+            width: 100%;
+            height: 230px;
+            object-fit: cover;
+            display: block;
+            border-top-left-radius: inherit;
+            border-top-right-radius: inherit;
+            flex-shrink: 0;
+        }
+
+        .spot-name {
+            padding: 1rem;
+            text-align: center;
+            font-weight: bold;
+            color: #60AFC4;
+            font-size: 1rem;
+            background: white;
+        }
+
+        /* 页脚样式 */
+        footer {
+            background-color: #60AFC4;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        footer p {
+            opacity: 0.8;
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 900px) {
+            .navbar {
+                gap: 1.5rem;
+                padding: 1rem;
+            }
+
+            .container {
+                padding: 1.2rem;
+            }
+
+            .detail-main {
+                flex-direction: column;
+            }
+
+            .detail-image {
+                max-width: 100%;
+            }
+
+            .detail-image img {
+                height: 240px;
+            }
+
+            .spots-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.2rem;
+            }
+
+            .detail-title {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .spots-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-image img {
+                height: 200px;
+            }
+
+            .detail-title {
+                font-size: 1.6rem;
+            }
+
+            .breadcrumb {
+                padding: 0.8rem 1rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <header>
+        <div class="navbar">
+            <a href="hongzhou.html" class="navbar-city">杭州</a>
+            <div class="navbar-dropdown">
+                <select id="citySelect" class="dropdown-select">
+                    <option value="qiandaohu.html" selected>选择城市</option>
+                    <option value="hongzhou.html">杭州市</option>
+                    <option value="ningbo.html">宁波市</option>
+                    <option value="wengzhou.html">温州市</option>
+                    <option value="jiaxing.html">嘉兴市</option>
+                    <option value="huzhou.html">湖州市</option>
+                    <option value="shaoxing.html">绍兴市</option>
+                    <option value="jinghua.html">金华市</option>
+                    <option value="quzhou.html">衢州市</option>
+                    <option value="zhoushann.html">舟山市</option>
+                    <option value="taizhou.html">台州市</option>
+                    <option value="lishui.html">丽水市</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <!-- 面包屑导航 -->
+    <div class="breadcrumb">
+        <a href="index.html">首页</a> > <a href="hongzhou.html">杭州</a> > <a href="#">景区</a> > 千岛湖
+    </div>
+
+    <!-- 主内容区域 -->
+    <div class="container">
+        <!-- 返回按钮 -->
+        <button class="back-btn" onclick="window.history.back()">← 返回</button>
+
+        <!-- 景区标题 -->
+        <div class="detail-title-wrap">
+            <h1 class="detail-title">千岛湖</h1>
+            <p class="detail-subtitle">国家5A级景区 | 国家级森林公园 | 世界三大千岛湖之一</p>
+        </div>
+
+        <!-- 标签栏 -->
+        <div class="tags-bar">
+            <span class="tag-item">5A级景区</span>
+            <span class="tag-item">淳安县</span>
+            <span class="tag-item">国家级森林公园</span>
+        </div>
+
+        <!-- 左图右文区域 -->
+        <div class="detail-main">
+            <div class="detail-image">
+                <img src="images/杭州/26千岛湖.jpg" alt="千岛湖全景">
+            </div>
+            <div class="detail-content">
+                <h2>一、基础概况</h2>
+                <p>千岛湖原名新安江水库，坐落于杭州市淳安县，小部分延伸至建德市西北，是新中国首座自主设计建造大型水电站蓄水形成的人工湖，国家 5A 级景区、国家级森林公园，与加拿大金斯顿千岛湖、湖北仙岛湖并称世界三大千岛湖。</p>
+                <p>建造历史：1955 年动工，1959 年蓄水、1960 年完工；1984 年正式定名 "千岛湖"。<br>水域规模：正常水位湖面约 580 平方公里，湖长 150 千米，平均水深 30.44 米，蓄水量 178 亿立方米；最高水位时，面积超 0.25 平方千米的岛屿共 1078 座，因此得名千岛湖。<br>水质名片：常年保持国家 I 类一级水体，能见度 7-12 米，被誉为天下第一秀水，是农夫山泉核心取水地，也是杭州、嘉兴等城市重要饮用水源。<br>生态环境：湖区森林覆盖率 82.5%，动植物资源丰富，有百余种淡水鱼、多种国家级保护野生动物。</p>
+                <div class="detail-info">
+                    <span>📍 地址：杭州市淳安县千岛湖镇</span>
+                    <span>⏰ 开放时间：旺季8:00-17:00，淡季8:00-16:30</span>
+                    <span>🎫 门票：旺季150元，淡季120元</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 水下千年古城 -->
+        <h2 class="detail-section-title">二、独特历史：水下千年古城</h2>
+        <div class="detail-content" style="margin-bottom: 3rem;">
+            <p>修建水库时，淳安贺城、遂安狮城两座千年古城连同近千个村落沉入湖底，29 万居民整体搬迁。水下完整保存明清街巷、牌坊、民居，是国内罕见水下古建遗址；岸边复刻文渊狮城，还原古城风貌，是千岛湖独有的人文记忆。</p>
+        </div>
+
+        <!-- 两大核心游览湖区 -->
+        <h2 class="detail-section-title">三、三大核心游览湖区</h2>
+        <div class="spots-grid">
+            <div class="spot-card">
+                <img src="images/杭州/36.jpg" alt="梅峰岛">
+                <div class="spot-name">梅峰揽胜</div>
+            </div>
+            <div class="spot-card">
+                <img src="images/杭州/37.jpg" alt="月光岛">
+                <div class="spot-name">月光岛</div>
+            </div>
+            <div class="spot-card">
+                <img src="images/杭州/38.jpg" alt="东南湖区">
+                <div class="spot-name">东南湖区</div>
+            </div>
+        </div>
+
+        <!-- 特色人文与美食 -->
+        <h2 class="detail-section-title" style="margin-top: 3rem;">四、特色人文与美食</h2>
+        <div class="detail-content" style="margin-bottom: 3rem;">
+            <p><strong>古村落：</strong>芹川古村，保存完整徽派古民居，小桥流水、民风古朴；</p>
+            <p><strong>渔文化：</strong>千年新安江渔乡，特色美食千岛湖有机鱼头、清水鱼、鱼干；</p>
+            <p><strong>度假业态：</strong>环湖遍布高端度假酒店、露营基地，适合休闲度假、水上骑行、环湖自驾。</p>
+        </div>
+
+        <!-- 综合价值 -->
+        <h2 class="detail-section-title">五、综合价值</h2>
+        <div class="detail-content">
+            <p>千岛湖兼具水利发电、防洪蓄水、城市供水、生态保护、观光度假多重功能；浙江设立淳安特别生态功能区，坚持生态优先保护一湖碧水，是长三角知名生态休闲旅游目的地。</p>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <p>&copy; 2024 浙江旅游网 - 诗画浙江，山水之美</p>
+    </footer>
+
+    <script>
+        // 城市下拉切换
+        document.getElementById('citySelect').addEventListener('change', function() {
+            var cityUrl = this.value;
+            if (cityUrl && cityUrl !== 'qiandaohu.html') {
+                window.location.href = cityUrl;
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>丽水 - 秀山丽水</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: #F5F8FA;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: #60AFC4;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .home-link {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: background 0.3s;
+        }
+
+        .home-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: background 0.3s;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropbtn {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: background 0.3s;
+            display: inline-block;
+        }
+
+        .dropbtn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .arrow {
+            font-size: 0.7rem;
+            margin-left: 0.3rem;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            border-radius: 8px;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: #333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: background 0.3s;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .city-banner {
+            width: 100%;
+            height: 90vh;
+            min-height: 700px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .banner-slides {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .banner-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        .banner-slide.active {
+            opacity: 1;
+        }
+
+        .banner-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .banner-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+        }
+
+        .banner-title {
+            color: white;
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+        }
+
+        .banner-indicators {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 3;
+        }
+
+        .banner-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .banner-indicator.active {
+            background: white;
+            transform: scale(1.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 1.8rem;
+            color: #1565c0;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #1e88e5, #1565c0);
+            border-radius: 2px;
+        }
+
+        /* 景区卡片网格 */
+        .scenic-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            column-gap: 1.5rem;
+            row-gap: 1.8rem;
+            margin-bottom: 3rem;
+        }
+
+        .scenic-grid .city-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 400px;
+        }
+
+        .scenic-grid .city-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .scenic-grid .city-card img {
+            width: 100%;
+            height: 240px;
+            object-fit: contain;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 0.3rem;
+        }
+
+        .scenic-grid .city-card-info {
+            padding: 1rem 0 0;
+            text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .scenic-grid .city-card-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #1565c0;
+            margin-bottom: 0.8rem;
+        }
+
+        .scenic-grid .city-card-desc {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 0.8rem;
+            line-height: 1.7;
+            flex: 1;
+        }
+
+        .scenic-grid .city-card-rating {
+            color: #ff9800;
+            font-size: 0.95rem;
+        }
+
+        /* 美食和住宿卡片样式 - 与景区卡片完全统一 */
+        .food-grid, .hotel-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            column-gap: 1.5rem;
+            row-gap: 1.8rem;
+            margin-bottom: 3rem;
+        }
+
+        .food-grid .city-card,
+        .hotel-grid .city-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 400px;
+        }
+
+        .food-grid .city-card:hover,
+        .hotel-grid .city-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .food-grid .city-card img,
+        .hotel-grid .city-card img {
+            width: 100%;
+            height: 240px;
+            object-fit: contain;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 0.3rem;
+        }
+
+        .food-grid .city-card-info,
+        .hotel-grid .city-card-info {
+            padding: 1rem 0 0;
+            text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .food-grid .city-card-title,
+        .hotel-grid .city-card-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #1565c0;
+            margin-bottom: 0.8rem;
+        }
+
+        .food-grid .city-card-desc,
+        .hotel-grid .city-card-desc {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 0.8rem;
+            line-height: 1.7;
+            flex: 1;
+        }
+
+        .food-grid .city-card-rating,
+        .hotel-grid .city-card-rating {
+            color: #ff9800;
+            font-size: 0.95rem;
+        }
+
+        footer {
+            background: #60AFC4;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        footer p {
+            opacity: 0.8;
+        }
+
+        .dify-float {
+            position: fixed;
+            left: 2rem;
+            bottom: 2rem;
+            z-index: 1000;
+        }
+
+        .dify-btn {
+            width: 60px;
+            height: 60px;
+            background: #529EAF;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(82, 158, 175, 0.4);
+            transition: all 0.3s;
+        }
+
+        .dify-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(82, 158, 175, 0.5);
+        }
+
+        .dify-modal {
+            display: none;
+            position: fixed;
+            left: 90px;
+            bottom: 0;
+            width: 320px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .dify-header {
+            background: #60AFC4;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dify-close {
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .dify-body {
+            padding: 1.5rem;
+        }
+
+        .dify-body p {
+            color: #555;
+            margin-bottom: 0.5rem;
+        }
+
+        .dify-body ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .dify-body li {
+            color: #555;
+            padding: 0.3rem 0;
+        }
+
+        @media (max-width: 900px) {
+            .scenic-grid, .food-grid, .hotel-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .banner-title {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .scenic-grid, .food-grid, .hotel-grid {
+                grid-template-columns: 1fr;
+            }
+            .navbar {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            .nav-links {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <a href="index.html" class="home-link">🏠 首页</a>
+            <div class="nav-links">
+                <a href="#jingqu" class="nav-link">景区TOP推荐</a>
+                <a href="#meishi" class="nav-link">本地美食</a>
+                <a href="#zhusu" class="nav-link">住宿推荐</a>
+            </div>
+            <div class="dropdown">
+                <a class="dropbtn">
+                    📍 选择城市 <span class="arrow">▼</span>
+                </a>
+                <div class="dropdown-content">
+                    <a href="hongzhou.html">杭州</a>
+                    <a href="ningbo.html">宁波</a>
+                    <a href="wengzhou.html">温州</a>
+                    <a href="jiaxing.html">嘉兴</a>
+                    <a href="huzhou.html">湖州</a>
+                    <a href="shaoxing.html">绍兴</a>
+                    <a href="jinghua.html">金华</a>
+                    <a href="quzhou.html">衢州</a>
+                    <a href="zhoushann.html">舟山</a>
+                    <a href="taizhou.html">台州</a>
+                    <a href="lishui.html" style="background:#1565c0;color:white">丽水</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 全屏Banner -->
+    <div class="city-banner">
+        <div class="banner-slides">
+            <div class="banner-slide active">
+                <img src="images/丽水/1.jpg" alt="丽水风光" style="width:100%; height:100%; object-fit:cover; display:block;">
+            </div>
+            <div class="banner-slide">
+                <img src="images/丽水/3.jpg" alt="丽水风光" style="width:100%; height:100%; object-fit:cover; display:block;">
+            </div>
+            <div class="banner-slide">
+                <img src="images/丽水/4.jpg" alt="丽水风光" style="width:100%; height:100%; object-fit:cover; display:block;">
+            </div>
+            <div class="banner-slide">
+                <img src="images/丽水/5.jpg" alt="丽水风光" style="width:100%; height:100%; object-fit:cover; display:block;">
+            </div>
+            <div class="banner-slide">
+                <img src="images/丽水/7.jpg" alt="丽水风光" style="width:100%; height:100%; object-fit:cover; display:block;">
+            </div>
+        </div>
+        <div class="banner-overlay">
+            <h1 class="banner-title">丽水 | 秀山丽水，养生福地</h1>
+        </div>
+        <div class="banner-indicators">
+            <span class="banner-indicator active" data-index="0"></span>
+            <span class="banner-indicator" data-index="1"></span>
+            <span class="banner-indicator" data-index="2"></span>
+            <span class="banner-indicator" data-index="3"></span>
+            <span class="banner-indicator" data-index="4"></span>
+        </div>
+    </div>
+
+    <!-- 主内容 -->
+    <div class="container">
+        <!-- 本市TOP景区 -->
+        <h2 id="jingqu" class="section-title">本市 TOP 景区</h2>
+        <div class="scenic-grid">
+            <div class="city-card">
+                <img src="images/丽水/2.jpg" alt="云和梯田景区" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">云和梯田景区</h3>
+                    <p class="city-card-desc">浙南梯田风光代表，层层叠叠的田埂随山势起伏，清晨云海与日出交相辉映，是丽水极具代表性的自然景观。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 4.7分</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/丽水/4.jpg" alt="百山祖" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">百山祖</h3>
+                    <p class="city-card-desc">国家4A级景区，浙江省第二高峰，拥有丰富的动植物资源和原始森林。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 4.6分</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/丽水/5.jpg" alt="古堰画乡" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">古堰画乡</h3>
+                    <p class="city-card-desc">国家4A级景区，融合了千年古堰和江南水乡风情，是画家写生的天堂。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 4.5分</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/丽水/7.jpg" alt="仙都" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">仙都</h3>
+                    <p class="city-card-desc">国家5A级景区，以奇特的丹霞地貌和优美的山水风光著称。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 4.8分</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/丽水/8.jpg" alt="畲乡之窗" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">畲乡之窗</h3>
+                    <p class="city-card-desc">国家4A级景区，展示畲族传统文化和民俗风情的特色景区。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 4.4分</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/丽水/9.jpg" alt="遂昌千佛山" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">遂昌千佛山</h3>
+                    <p class="city-card-desc">国家4A级景区，以清幽的山水和悠久的佛教文化闻名。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 4.5分</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 本地美食 -->
+        <h2 id="meishi" class="section-title">本地美食</h2>
+        <div class="food-grid">
+            <div class="city-card">
+                <img src="images/丽水/10.jpg" alt="缙云烧饼" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">缙云烧饼</h3>
+                    <p class="city-card-desc">丽水标志性小吃，梅干菜搭配土猪肉馅，饼皮烤至金黄酥脆，香气浓郁，是浙南必尝风味。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 推荐指数</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/丽水/11.jpg" alt="遂昌风炉锅" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">遂昌风炉锅</h3>
+                    <p class="city-card-desc">遂昌传统农家火锅，以炭炉慢炖本地鲜蔬土肉，食材原汁原味，暖身鲜香，充满山野烟火气。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 推荐指数</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/丽水/12.jpg" alt="山粉饺" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">山粉饺</h3>
+                    <p class="city-card-desc">用地瓜粉制作外皮，包裹鲜肉笋丁馅料，蒸煮后软糯Q弹，是丽水逢年过节必备特色点心。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 推荐指数</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/丽水/13.jpg" alt="畲族豆腐娘" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">畲族豆腐娘</h3>
+                    <p class="city-card-desc">畲族传统家常菜，嫩豆腐搭配肉末青菜焖煮，口感绵密清淡鲜香，老少皆宜。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 推荐指数</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/丽水/14.jpg" alt="青田田鱼" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">青田田鱼</h3>
+                    <p class="city-card-desc">稻田共生生态鱼，肉质细嫩无土腥味，红烧清蒸皆美味，是青田独有的农耕特色食材。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 推荐指数</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/丽水/15.jpg" alt="乌米饭" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">乌米饭</h3>
+                    <p class="city-card-desc">南烛树叶浸泡糯米蒸煮而成，色泽乌黑透亮，自带草木清香，是畲族传统节庆美食。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 推荐指数</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 住宿推荐 -->
+        <h2 id="zhusu" class="section-title">住宿推荐</h2>
+        <div class="hotel-grid">
+            <div class="city-card">
+                <img src="images/丽水/16.jpg" alt="那云・天空之城度假酒店" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">那云・天空之城度假酒店</h3>
+                    <p class="city-card-desc">依山而建的网红洞穴度假酒店，配套温泉、山野步道，沉浸式感受丽水山林野趣，适合休闲度假。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 五星级</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/丽水/17.jpg" alt="丽水万地温德姆至尊酒店" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">丽水万地温德姆至尊酒店</h3>
+                    <p class="city-card-desc">城区高端五星级商务酒店，配套宴会厅、恒温泳池，地理位置优越，兼顾商旅与家庭出行。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 精品民宿</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/丽水/18.jpg" alt="云和梯田酒店" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">云和梯田酒店</h3>
+                    <p class="city-card-desc">位于云和梯田景区内，可欣赏壮丽的梯田日出美景。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 四星级</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/丽水/19.jpg" alt="遂昌温泉度假村" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">遂昌温泉度假村</h3>
+                    <p class="city-card-desc">天然温泉度假胜地，享受温泉养生，放松身心。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 四星级</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/丽水/20.jpg" alt="古堰蓝庭酒店" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">古堰蓝庭酒店</h3>
+                    <p class="city-card-desc">坐落古堰画乡景区内，白墙黛瓦江南古风建筑，推窗可见瓯江风光，写生旅居优选。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 四星级</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/丽水/21.jpg" alt="缙云锦江国际大酒店" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">缙云锦江国际大酒店</h3>
+                    <p class="city-card-desc">仙都景区旁星级酒店，客房宽敞雅致，配套特色餐饮，游玩仙都出行十分便利。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐ 三星级</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <p>&copy; 2024 浙江旅游网 - 诗画浙江，山水之美</p>
+    </footer>
+
+    <!-- Dify智能体悬浮按钮 -->
+    <div class="dify-float">
+        <button class="dify-btn" id="difyBtn">🤖</button>
+        <div class="dify-modal" id="difyModal">
+            <div class="dify-header">
+                <h3>智能旅游推荐</h3>
+                <span class="dify-close" id="difyClose">×</span>
+            </div>
+            <div class="dify-body">
+                <p>🤖 欢迎咨询智能旅游助手！</p>
+                <p>我可以为您推荐：</p>
+                <ul>
+                    <li>📍 热门景点推荐</li>
+                    <li>🍜 本地特色美食</li>
+                    <li>🏨 住宿选择建议</li>
+                    <li>🚗 出行路线规划</li>
+                </ul>
+                <p>智能体功能开发中，敬请期待！</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 下拉菜单
+        document.querySelector('.dropdown').addEventListener('mouseenter', function() {
+            document.querySelector('.dropdown-content').style.display = 'block';
+        });
+        document.querySelector('.dropdown').addEventListener('mouseleave', function() {
+            document.querySelector('.dropdown-content').style.display = 'none';
+        });
+
+        // Dify模态框
+        const difyBtn = document.getElementById('difyBtn');
+        const difyModal = document.getElementById('difyModal');
+        const difyClose = document.getElementById('difyClose');
+
+        difyBtn.addEventListener('click', function() {
+            difyModal.style.display = 'block';
+        });
+
+        difyClose.addEventListener('click', function() {
+            difyModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', function(e) {
+            if (e.target == difyModal) {
+                difyModal.style.display = 'none';
+            }
+        });
+
+        // 轮播功能
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.banner-slide');
+        const indicators = document.querySelectorAll('.banner-indicator');
+        const totalSlides = slides.length;
+
+        function showSlide(index) {
+            if (index >= totalSlides) currentSlide = 0;
+            if (index < 0) currentSlide = totalSlides - 1;
+            
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                if (i === currentSlide) slide.classList.add('active');
+            });
+            
+            indicators.forEach((indicator, i) => {
+                indicator.classList.remove('active');
+                if (i === currentSlide) indicator.classList.add('active');
+            });
+        }
+
+        function nextSlide() {
+            currentSlide++;
+            showSlide(currentSlide);
+        }
+
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => {
+                currentSlide = index;
+                showSlide(currentSlide);
+            });
+        });
+
+        setInterval(nextSlide, 5000);
+    </script>
+</body>
+</html>

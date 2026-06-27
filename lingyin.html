@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>灵隐寺 - 杭州旅游</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background-color: #F5F8FA;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            background-color: #60AFC4;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar-city {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .navbar-city:hover {
+            opacity: 0.8;
+        }
+
+        .navbar-dropdown {
+            position: relative;
+        }
+
+        .dropdown-select {
+            padding: 0.5rem 2rem 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: white;
+            color: #333;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            min-width: 140px;
+        }
+
+        .dropdown-select option {
+            background-color: white;
+            color: #333;
+        }
+
+        .navbar-dropdown::after {
+            content: '▼';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #60AFC4;
+            font-size: 0.6rem;
+            pointer-events: none;
+        }
+
+        /* 面包屑导航 */
+        .breadcrumb {
+            padding: 1rem 2rem;
+            background: #f5f5f5;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .breadcrumb a {
+            color: #60AFC4;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* 返回按钮 */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            background: #529EAF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+            margin-bottom: 1.5rem;
+        }
+
+        .back-btn:hover {
+            background: #428899;
+        }
+
+        /* 主体内容区域 */
+        .container {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 景区标题 */
+        .detail-title-wrap {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .detail-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #60AFC4;
+            margin-bottom: 0.8rem;
+        }
+
+        .detail-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: #60AFC4;
+            margin: 1rem auto 0;
+        }
+
+        .detail-subtitle {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        /* 详情主图区域 */
+        .detail-main {
+            display: flex;
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+            align-items: flex-start;
+        }
+
+        .detail-image {
+            flex-shrink: 0;
+            max-width: 420px;
+            width: 100%;
+        }
+
+        .detail-image img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .detail-content {
+            flex: 1;
+        }
+
+        .detail-content h2 {
+            color: #60AFC4;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .detail-content h2::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 2px;
+            background: #60AFC4;
+            margin: 0.5rem auto 0;
+        }
+
+        .detail-content p {
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        /* 详情信息 */
+        .detail-info {
+            margin-top: 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            font-size: 0.95rem;
+            color: #555;
+            justify-content: center;
+        }
+
+        /* 标签栏 */
+        .tags-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .tag-item {
+            padding: 0.6rem 1.2rem;
+            background: #E8F4F8;
+            color: #60AFC4;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* 小景点网格 */
+        .detail-section-title {
+            text-align: center;
+            color: #60AFC4;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-section-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background: #60AFC4;
+            margin: 0.8rem auto 1.5rem;
+        }
+
+        .spots-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.8rem;
+            margin-top: 1rem;
+        }
+
+        .spot-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .spot-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .spot-card img {
+            width: 100%;
+            height: 230px;
+            object-fit: cover;
+            display: block;
+            border-top-left-radius: inherit;
+            border-top-right-radius: inherit;
+            flex-shrink: 0;
+        }
+
+        .spot-name {
+            padding: 1rem;
+            text-align: center;
+            font-weight: bold;
+            color: #60AFC4;
+            font-size: 1rem;
+            background: white;
+        }
+
+        /* 页脚样式 */
+        footer {
+            background-color: #60AFC4;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        footer p {
+            opacity: 0.8;
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 900px) {
+            .navbar {
+                gap: 1.5rem;
+                padding: 1rem;
+            }
+
+            .container {
+                padding: 1.2rem;
+            }
+
+            .detail-main {
+                flex-direction: column;
+            }
+
+            .detail-image {
+                max-width: 100%;
+            }
+
+            .detail-image img {
+                height: 240px;
+            }
+
+            .spots-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.2rem;
+            }
+
+            .detail-title {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .spots-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-image img {
+                height: 200px;
+            }
+
+            .detail-title {
+                font-size: 1.6rem;
+            }
+
+            .breadcrumb {
+                padding: 0.8rem 1rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <header>
+        <div class="navbar">
+            <a href="hongzhou.html" class="navbar-city">杭州</a>
+            <div class="navbar-dropdown">
+                <select id="citySelect" class="dropdown-select">
+                    <option value="lingyin.html" selected>选择城市</option>
+                    <option value="hongzhou.html">杭州市</option>
+                    <option value="ningbo.html">宁波市</option>
+                    <option value="wengzhou.html">温州市</option>
+                    <option value="jiaxing.html">嘉兴市</option>
+                    <option value="huzhou.html">湖州市</option>
+                    <option value="shaoxing.html">绍兴市</option>
+                    <option value="jinghua.html">金华市</option>
+                    <option value="quzhou.html">衢州市</option>
+                    <option value="zhoushann.html">舟山市</option>
+                    <option value="taizhou.html">台州市</option>
+                    <option value="lishui.html">丽水市</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <!-- 面包屑导航 -->
+    <div class="breadcrumb">
+        <a href="index.html">首页</a> > <a href="hongzhou.html">杭州</a> > <a href="#">景区</a> > 灵隐寺
+    </div>
+
+    <!-- 主内容区域 -->
+    <div class="container">
+        <!-- 返回按钮 -->
+        <button class="back-btn" onclick="window.history.back()">← 返回</button>
+
+        <!-- 景区标题 -->
+        <div class="detail-title-wrap">
+            <h1 class="detail-title">灵隐寺</h1>
+            <p class="detail-subtitle">江南禅宗五山之首 | 国家4A级景区 | 杭州历史最悠久的千年古刹</p>
+        </div>
+
+        <!-- 标签栏 -->
+        <div class="tags-bar">
+            <span class="tag-item">4A级景区</span>
+            <span class="tag-item">西湖区</span>
+            <span class="tag-item">千年古刹</span>
+        </div>
+
+        <!-- 左图右文区域 -->
+        <div class="detail-main">
+            <div class="detail-image">
+                <img src="images/杭州/4.jpg" alt="灵隐寺全景">
+            </div>
+            <div class="detail-content">
+                <h2>一、基础概况</h2>
+                <p>灵隐寺坐落于杭州西湖西侧灵隐山麓，背靠北高峰、面朝飞来峰，又称云林禅寺，是江南禅宗五山之首、杭州历史最悠久的千年古刹。</p>
+                <p>始建：东晋咸和元年（公元 326 年），距今约 1700 年；<br>开山祖师：印度高僧慧理和尚；<br>名称由来：慧理见飞来峰酷似天竺灵鹫山，感慨 "仙灵所隐"，定名灵隐；清康熙南巡御题 "云林禅寺"，后世仍习惯称灵隐寺；<br>整体景区：由飞来峰摩崖石刻与灵隐寺院两部分组成，是西湖世界文化景观重要组成。</p>
+                <div class="detail-info">
+                    <span>📍 地址：杭州市西湖区灵隐路法云弄1号</span>
+                    <span>⏰ 开放时间：7:30-17:30（冬季至17:00）</span>
+                    <span>🎫 门票：飞来峰景区45元，灵隐寺香花券30元</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 千年发展历史 -->
+        <h2 class="detail-section-title">二、千年发展历史</h2>
+        <div class="detail-content" style="margin-bottom: 3rem;">
+            <p><strong>东晋初创：</strong>慧理开山建寺，初建规模简易；</p>
+            <p><strong>五代鼎盛：</strong>吴越王钱镠大规模扩建，全盛时九楼十八阁、七十二殿堂，僧众三千余人；</p>
+            <p><strong>唐宋兴盛：</strong>白居易、苏轼等文人常游，帝王多次拨款修缮；</p>
+            <p><strong>明清沿革：</strong>屡遭损毁又反复重建，康熙赐 "云林禅寺" 匾额；</p>
+            <p><strong>当代修缮：</strong>历经多次整修，现为国内知名佛教道场，占地面积约 8.7 万平方米。</p>
+        </div>
+
+        <!-- 两大核心景观 -->
+        <h2 class="detail-section-title">三、三大核心景观</h2>
+        <div class="spots-grid">
+            <div class="spot-card">
+                <img src="images/杭州/33.jpg" alt="飞来峰石刻">
+                <div class="spot-name">飞来峰石刻</div>
+            </div>
+            <div class="spot-card">
+                <img src="images/杭州/34.jpg" alt="大雄宝殿">
+                <div class="spot-name">大雄宝殿</div>
+            </div>
+            <div class="spot-card">
+                <img src="images/杭州/35.jpg" alt="五百罗汉堂">
+                <div class="spot-name">五百罗汉堂</div>
+            </div>
+        </div>
+
+        <!-- 人文传说与文化价值 -->
+        <h2 class="detail-section-title" style="margin-top: 3rem;">四、人文传说与文化价值</h2>
+        <div class="detail-content" style="margin-bottom: 3rem;">
+            <p><strong>济公传说：</strong>灵隐最知名文化符号，相传济公在此扶危济困、疯癫度人；</p>
+            <p><strong>诗词文赋：</strong>白居易、苏轼、陆游、杨万里等数百位文人留下咏灵隐诗文；</p>
+            <p><strong>艺术瑰宝：</strong>飞来峰石刻融合中印佛教造像风格，是江南石窟艺术代表；</p>
+            <p><strong>禅宗圣地：</strong>作为江南禅宗五山之首，对中国佛教发展影响深远。</p>
+        </div>
+
+        <!-- 实用游览信息 -->
+        <h2 class="detail-section-title">五、实用游览信息</h2>
+        <div class="detail-content">
+            <p><strong>交通方式：</strong>乘7、Y2、103、121路至灵隐站；节假日建议公交或景区接驳车，停车位紧张。</p>
+            <p><strong>游览贴士：</strong>入寺可免费领取三支清香，殿内禁止拍照；穿着得体，勿穿短裤短裙；建议游览时间2-3小时。</p>
+            <p><strong>周边推荐：</strong>可一并游览永福寺、韬光寺，感受灵隐景区整体氛围。</p>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <p>&copy; 2024 浙江旅游网 - 诗画浙江，山水之美</p>
+    </footer>
+
+    <script>
+        // 城市下拉切换
+        document.getElementById('citySelect').addEventListener('change', function() {
+            var cityUrl = this.value;
+            if (cityUrl && cityUrl !== 'lingyin.html') {
+                window.location.href = cityUrl;
+            }
+        });
+    </script>
+
+</body>
+</html>
