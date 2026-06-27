@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>东坡肉 - 杭州美食</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background-color: #F5F8FA;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            background-color: #60AFC4;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar-city {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .navbar-city:hover {
+            opacity: 0.8;
+        }
+
+        .navbar-dropdown {
+            position: relative;
+        }
+
+        .dropdown-select {
+            padding: 0.5rem 2rem 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: white;
+            color: #333;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            min-width: 140px;
+        }
+
+        .dropdown-select option {
+            background-color: white;
+            color: #333;
+        }
+
+        .navbar-dropdown::after {
+            content: '▼';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #60AFC4;
+            font-size: 0.6rem;
+            pointer-events: none;
+        }
+
+        /* 面包屑导航 */
+        .breadcrumb {
+            padding: 1rem 2rem;
+            background: #f5f5f5;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .breadcrumb a {
+            color: #60AFC4;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* 返回按钮 */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            background: #529EAF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+            margin-bottom: 1.5rem;
+        }
+
+        .back-btn:hover {
+            background: #428899;
+        }
+
+        /* 主体内容区域 */
+        .container {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 景区标题 */
+        .detail-title-wrap {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .detail-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #60AFC4;
+            margin-bottom: 0.8rem;
+        }
+
+        .detail-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: #60AFC4;
+            margin: 1rem auto 0;
+        }
+
+        .detail-subtitle {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        /* 详情主图区域 */
+        .detail-main {
+            display: flex;
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+            align-items: flex-start;
+        }
+
+        .detail-image {
+            flex-shrink: 0;
+            max-width: 420px;
+            width: 100%;
+        }
+
+        .detail-image img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .detail-content {
+            flex: 1;
+        }
+
+        .detail-content h2 {
+            color: #60AFC4;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .detail-content h2::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 2px;
+            background: #60AFC4;
+            margin: 0.5rem auto 0;
+        }
+
+        .detail-content p {
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        /* 详情信息 */
+        .detail-info {
+            margin-top: 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            font-size: 0.95rem;
+            color: #555;
+            justify-content: center;
+        }
+
+        /* 标签栏 */
+        .tags-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .tag-item {
+            padding: 0.6rem 1.2rem;
+            background: #E8F4F8;
+            color: #60AFC4;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* 小景点网格 */
+        .detail-section-title {
+            text-align: center;
+            color: #60AFC4;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-section-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background: #60AFC4;
+            margin: 0.8rem auto 1.5rem;
+        }
+
+        .spots-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.8rem;
+            margin-top: 1rem;
+        }
+
+        .spot-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .spot-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .spot-card img {
+            width: 100%;
+            height: 230px;
+            object-fit: cover;
+            display: block;
+            border-top-left-radius: inherit;
+            border-top-right-radius: inherit;
+            flex-shrink: 0;
+        }
+
+        .spot-name {
+            padding: 1rem;
+            text-align: center;
+            font-weight: bold;
+            color: #60AFC4;
+            font-size: 1rem;
+            background: white;
+        }
+
+        /* 页脚样式 */
+        footer {
+            background-color: #60AFC4;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        footer p {
+            opacity: 0.8;
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 900px) {
+            .navbar {
+                gap: 1.5rem;
+                padding: 1rem;
+            }
+
+            .container {
+                padding: 1.2rem;
+            }
+
+            .detail-main {
+                flex-direction: column;
+            }
+
+            .detail-image {
+                max-width: 100%;
+            }
+
+            .detail-image img {
+                height: 240px;
+            }
+
+            .spots-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.2rem;
+            }
+
+            .detail-title {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .spots-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-image img {
+                height: 200px;
+            }
+
+            .detail-title {
+                font-size: 1.6rem;
+            }
+
+            .breadcrumb {
+                padding: 0.8rem 1rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <header>
+        <div class="navbar">
+            <a href="hongzhou.html" class="navbar-city">杭州</a>
+            <div class="navbar-dropdown">
+                <select id="citySelect" class="dropdown-select">
+                    <option value="dongporou.html" selected>选择城市</option>
+                    <option value="hongzhou.html">杭州市</option>
+                    <option value="ningbo.html">宁波市</option>
+                    <option value="wengzhou.html">温州市</option>
+                    <option value="jiaxing.html">嘉兴市</option>
+                    <option value="huzhou.html">湖州市</option>
+                    <option value="shaoxing.html">绍兴市</option>
+                    <option value="jinghua.html">金华市</option>
+                    <option value="quzhou.html">衢州市</option>
+                    <option value="zhoushann.html">舟山市</option>
+                    <option value="taizhou.html">台州市</option>
+                    <option value="lishui.html">丽水市</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <!-- 面包屑导航 -->
+    <div class="breadcrumb">
+        <a href="index.html">首页</a> > <a href="hongzhou.html">杭州</a> > <a href="#">美食</a> > 东坡肉
+    </div>
+
+    <!-- 主内容区域 -->
+    <div class="container">
+        <!-- 返回按钮 -->
+        <button class="back-btn" onclick="window.history.back()">← 返回</button>
+
+        <!-- 标题 -->
+        <div class="detail-title-wrap">
+            <h1 class="detail-title">东坡肉</h1>
+            <p class="detail-subtitle">杭帮菜经典头牌 | 江南文人名菜 | 浙江省级非遗</p>
+        </div>
+
+        <!-- 标签栏 -->
+        <div class="tags-bar">
+            <span class="tag-item">杭帮菜</span>
+            <span class="tag-item">省级非遗</span>
+            <span class="tag-item">文人名菜</span>
+        </div>
+
+        <!-- 左图右文区域 -->
+        <div class="detail-main">
+            <div class="detail-image">
+                <img src="images/杭州/18.webp" alt="东坡肉">
+            </div>
+            <div class="detail-content">
+                <h2>一、菜品定位</h2>
+                <p>东坡肉是杭帮菜经典头牌、江南文人名菜，以北宋文豪苏轼（号东坡居士）命名，距今近千年历史，1956 年入选杭州 36 道名菜，楼外楼焖制东坡肉技艺为浙江省级非遗，是游览西湖必尝特色菜。</p>
+            </div>
+        </div>
+
+        <!-- 历史由来 -->
+        <h2 class="detail-section-title">二、历史由来</h2>
+        <div class="detail-content" style="margin-bottom: 3rem;">
+            <p><strong>黄州始创，留下秘方</strong></p>
+            <p>苏轼被贬黄州时，当地猪肉价廉，他摸索出独特焖肉方法，写下《猪肉颂》：慢着火，少着水，火候足时他自美，奠定东坡肉核心烹饪思路。</p>
+            <p><strong>杭州定型，广为流传</strong></p>
+            <p>元祐四年苏轼任杭州知州，主持疏浚西湖、修筑苏堤，百姓感念他勤政爱民，春节送来大量猪肉。苏轼吩咐家人把肉切块、配酒送给修湖民工；家人误将 "连酒一起送" 理解为 "连酒一起烧"，以绍兴黄酒代替清水焖煮，成品醇香软糯、风味绝佳，百姓争相效仿，取名 "东坡肉" 流传至今。</p>
+        </div>
+
+        <!-- 选材标准 -->
+        <h2 class="detail-section-title">三、选材标准</h2>
+        <div class="detail-content" style="margin-bottom: 3rem;">
+            <p>主料优选金华两头乌三层带皮五花肉，肥瘦层次均匀，切成 4-5 厘米方正大块，形似麻将；辅料只用绍兴加饭酒、冰糖、本地酱油、葱姜，极少香料，不掩盖肉本身鲜香。</p>
+        </div>
+
+        <!-- 核心烹饪特色 -->
+        <h2 class="detail-section-title">四、核心烹饪特色</h2>
+        <div class="detail-content" style="margin-bottom: 3rem;">
+            <p><strong>以酒代水：</strong>全程不加清水，依靠黄酒焖炖，去腥解腻，增添温润酒香；</p>
+            <p><strong>砂锅慢焖：</strong>锅底铺葱姜防粘，肉皮朝下小火焖煮 2 小时以上，中途翻面，肉质酥烂不散；</p>
+            <p><strong>文火收汁：</strong>依靠冰糖、酱油上色，汤汁浓稠透亮，牢牢挂在肉块表面。</p>
+        </div>
+
+        <!-- 外观与风味特点 -->
+        <h2 class="detail-section-title">五、外观与风味特点</h2>
+        <div class="detail-content" style="margin-bottom: 3rem;">
+            <p><strong>外观：</strong>肉块方整，表皮红亮油润如琥珀，色泽醇厚；</p>
+            <p><strong>口感：</strong>皮糯胶质丰富，肥肉入口即化、油脂完全析出，瘦肉酥烂不柴，酥烂而形不碎，香糯而不腻口；</p>
+            <p><strong>口味：</strong>咸甜平衡，酱香融合黄酒清香，回味甘甜，汤汁拌饭尤为美味。</p>
+        </div>
+
+        <!-- 文化内涵 -->
+        <h2 class="detail-section-title">六、文化内涵</h2>
+        <div class="detail-content">
+            <p>东坡肉不只是一道肉食，更是代表苏轼豁达淡泊、体恤百姓的文人饮食符号。它将西湖治水的民间故事与烹饪技艺结合，是西湖饮食文化、宋代文人生活美学的典型代表。</p>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <p>&copy; 2024 浙江旅游网 - 诗画浙江，山水之美</p>
+    </footer>
+
+    <script>
+        // 城市下拉切换
+        document.getElementById('citySelect').addEventListener('change', function() {
+            var cityUrl = this.value;
+            if (cityUrl && cityUrl !== 'dongporou.html') {
+                window.location.href = cityUrl;
+            }
+        });
+    </script>
+
+</body>
+</html>

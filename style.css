@@ -1,0 +1,766 @@
+/* 浙游通全局样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background-color: #F5F2EB;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* 容器 */
+.zyt-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* 顶部导航栏 */
+.zyt-header {
+    background-color: #4A6741;
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.zyt-header .zyt-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.zyt-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.logo-icon {
+    font-size: 1.5rem;
+}
+
+.logo-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+}
+
+.zyt-nav {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-item {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* 搜索区域 */
+.zyt-search-bar {
+    background-color: #fff;
+    padding: 1rem 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.zyt-search-bar .zyt-container {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.search-left,
+.search-center,
+.search-right {
+    flex: 1;
+}
+
+.city-select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.search-btn {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background-color: #4A6741;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-btn:hover {
+    background-color: #3D5A36;
+}
+
+/* 主体内容 */
+.zyt-main {
+    padding: 2rem 0;
+}
+
+.zyt-main .zyt-container {
+    display: flex;
+    gap: 2rem;
+}
+
+/* 左侧分类侧边栏 */
+.zyt-sidebar {
+    width: 220px;
+    flex-shrink: 0;
+}
+
+.sidebar-title {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #4A6741;
+    margin-bottom: 0.75rem;
+    padding-left: 0.5rem;
+    border-left: 3px solid #4A6741;
+}
+
+.sidebar-items {
+    margin-bottom: 1.5rem;
+}
+
+.sidebar-item {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    color: #555;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.sidebar-item:hover {
+    background-color: #E8F5E9;
+    color: #4A6741;
+}
+
+/* 右侧主内容区 */
+.zyt-content {
+    flex: 1;
+}
+
+/* 轮播Banner */
+.zyt-banner {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    height: 400px;
+}
+
+.banner-slides {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.banner-slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.banner-slide.active {
+    opacity: 1;
+}
+
+.banner-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: bannerZoom 8s ease-in-out infinite;
+}
+
+@keyframes bannerZoom {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.banner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.banner-content {
+    text-align: center;
+    color: white;
+    z-index: 2;
+}
+
+.banner-title {
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+.banner-desc {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 1.5rem;
+}
+
+.banner-btn {
+    padding: 0.8rem 2rem;
+    background-color: white;
+    color: #4A6741;
+    border: none;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.banner-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.banner-indicators {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.5rem;
+    z-index: 3;
+}
+
+.banner-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.banner-indicator.active,
+.banner-indicator:hover {
+    background: white;
+    transform: scale(1.2);
+}
+
+/* 板块标题 */
+.section-header {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 1.5rem;
+    padding-left: 0.5rem;
+    border-left: 3px solid #4A6741;
+}
+
+/* 热门城市卡片 */
+.city-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.city-card {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    transition: all 0.3s ease;
+    height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.city-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.city-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.city-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.city-desc {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.75rem;
+}
+
+/* 杭州卡片特殊样式 */
+.city-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.hangzhou-card {
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    height: 220px;
+}
+
+.city-bg-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.city-overlay {
+    position: relative;
+    z-index: 2;
+    padding: 1.5rem;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.2));
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.hangzhou-card .city-icon {
+    opacity: 0.8;
+}
+
+.hangzhou-card .city-name {
+    color: white;
+    font-size: 1.3rem;
+}
+
+.hangzhou-card .city-desc {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.85rem;
+}
+
+.hangzhou-card .city-tag {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* 宁波卡片特殊样式 */
+.ningbo-card {
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    height: 220px;
+}
+
+.ningbo-card .city-name {
+    color: white;
+    font-size: 1.2rem;
+}
+
+.ningbo-card .city-desc {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.85rem;
+}
+
+.ningbo-card .city-tag {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* 绍兴卡片特殊样式 */
+.shaoxing-card {
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    height: 220px;
+}
+
+.shaoxing-card .city-name {
+    color: white;
+    font-size: 1.2rem;
+}
+
+.shaoxing-card .city-desc {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.85rem;
+}
+
+.shaoxing-card .city-tag {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* 温州卡片特殊样式 */
+.wenzhou-card {
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    height: 220px;
+}
+
+.wenzhou-card .city-bg-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.wenzhou-card .city-name {
+    color: white;
+    font-size: 1.2rem;
+}
+
+.wenzhou-card .city-desc {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.85rem;
+}
+
+.wenzhou-card .city-tag {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* 舟山卡片特殊样式 */
+.zhoushan-card {
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    height: 220px;
+}
+
+.zhoushan-card .city-name {
+    color: white;
+    font-size: 1.2rem;
+}
+
+.zhoushan-card .city-desc {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.85rem;
+}
+
+.zhoushan-card .city-tag {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* 嘉兴卡片特殊样式 */
+.jiaxing-card {
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    height: 220px;
+}
+
+.jiaxing-card .city-name {
+    color: white;
+    font-size: 1.2rem;
+}
+
+.jiaxing-card .city-desc {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.85rem;
+}
+
+.jiaxing-card .city-tag {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.city-tag {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background-color: #E8F5E9;
+    color: #4A6741;
+    font-size: 0.8rem;
+    border-radius: 15px;
+}
+
+/* 文旅资讯 */
+.news-list {
+    background-color: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.news-item {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.news-item:last-child {
+    border-bottom: none;
+}
+
+.news-date {
+    color: #999;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.news-content {
+    flex: 1;
+}
+
+.news-title {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.news-desc {
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.5;
+}
+
+/* 页脚 */
+.zyt-footer {
+    background-color: #3D5A36;
+    color: white;
+    padding: 3rem 0;
+    margin-top: 3rem;
+}
+
+.zyt-footer .zyt-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.footer-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.footer-col p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.footer-links {
+    list-style: none;
+}
+
+.footer-links li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-links a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: white;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 2rem;
+    margin-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.85rem;
+}
+
+/* AI助手悬浮按钮 */
+.ai-float {
+    position: fixed;
+    right: 2rem;
+    bottom: 2rem;
+    z-index: 1000;
+}
+
+.ai-btn {
+    width: 60px;
+    height: 60px;
+    background-color: #4A6741;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(74, 103, 65, 0.4);
+    transition: all 0.3s ease;
+}
+
+.ai-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(74, 103, 65, 0.5);
+}
+
+.ai-modal {
+    display: none;
+    position: fixed;
+    right: 90px;
+    bottom: 0;
+    width: 320px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.ai-header {
+    background-color: #4A6741;
+    color: white;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ai-header h3 {
+    font-size: 1rem;
+}
+
+.ai-close {
+    font-size: 1.5rem;
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.ai-close:hover {
+    opacity: 1;
+}
+
+.ai-body {
+    padding: 1.5rem;
+}
+
+.ai-body p {
+    color: #555;
+    margin-bottom: 0.5rem;
+}
+
+.ai-body ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.ai-body li {
+    color: #555;
+    padding: 0.3rem 0;
+}
+
+/* 响应式布局 */
+@media (max-width: 992px) {
+    .zyt-main .zyt-container {
+        flex-direction: column;
+    }
+    
+    .zyt-sidebar {
+        width: 100%;
+    }
+    
+    .city-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .zyt-footer .zyt-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .zyt-search-bar .zyt-container {
+        flex-direction: column;
+    }
+    
+    .search-left,
+    .search-center,
+    .search-right {
+        width: 100%;
+    }
+    
+    .city-cards {
+        grid-template-columns: 1fr;
+    }
+    
+    .news-item {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .banner-title {
+        font-size: 1.5rem;
+    }
+    
+    .zyt-banner {
+        padding: 2rem 1rem;
+    }
+}

@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>杭州 - 人间天堂</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 杭州页面专属样式 */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: #F5F8FA;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 导航栏 */
+        header {
+            background: #60AFC4;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .home-link {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: background 0.3s;
+        }
+
+        .home-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: background 0.3s;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* 下拉菜单 */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropbtn {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: background 0.3s;
+            display: inline-block;
+        }
+
+        .dropbtn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .arrow {
+            font-size: 0.7rem;
+            margin-left: 0.3rem;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            border-radius: 8px;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: #333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: background 0.3s;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* 全屏Banner轮播 */
+        .city-banner {
+            width: 100%;
+            height: 90vh;
+            min-height: 700px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .banner-slides {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .banner-slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        .banner-slide.active {
+            opacity: 1;
+        }
+
+        .banner-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            animation: bannerZoomIn 8s ease-in-out infinite;
+        }
+
+        @keyframes bannerZoomIn {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .banner-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+        }
+
+        .banner-title {
+            color: white;
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .banner-indicators {
+            position: absolute;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem;
+            z-index: 3;
+        }
+
+        .banner-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .banner-indicator.active,
+        .banner-indicator:hover {
+            background: white;
+            transform: scale(1.2);
+        }
+
+        /* 容器 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 20px;
+        }
+
+        /* 板块标题 */
+        .section-title {
+            text-align: center;
+            font-size: 1.8rem;
+            color: #1565c0;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #1e88e5, #1565c0);
+            border-radius: 2px;
+        }
+
+        /* 景区卡片网格 */
+        .scenic-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            column-gap: 1.5rem;
+            row-gap: 1.8rem;
+            margin-bottom: 3rem;
+        }
+
+        .scenic-grid .city-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 400px;
+        }
+
+        .scenic-grid .city-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .scenic-grid .city-card img {
+            width: 100%;
+            height: 240px;
+            object-fit: contain;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 0.3rem;
+        }
+
+        .scenic-grid .city-card-info {
+            padding: 1rem 0 0;
+            text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .scenic-grid .city-card-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #1565c0;
+            margin-bottom: 0.8rem;
+        }
+
+        .scenic-grid .city-card-desc {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 0.8rem;
+            line-height: 1.7;
+            flex: 1;
+        }
+
+        .scenic-grid .city-card-rating {
+            color: #ff9800;
+            font-size: 0.95rem;
+        }
+
+        /* 美食卡片样式与景区卡片统一 */
+        .food-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            column-gap: 1.5rem;
+            row-gap: 1.8rem;
+            margin-bottom: 3rem;
+        }
+
+        .food-grid .city-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 400px;
+        }
+
+        .food-grid .city-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .food-grid .city-card img {
+            width: 100%;
+            height: 240px;
+            object-fit: contain;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 0.3rem;
+        }
+
+        .food-grid .city-card-info {
+            padding: 1rem 0 0;
+            text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .food-grid .city-card-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #1565c0;
+            margin-bottom: 0.8rem;
+        }
+
+        .food-grid .city-card-desc {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 0.8rem;
+            line-height: 1.7;
+            flex: 1;
+        }
+
+        .food-grid .city-card-rating {
+            color: #ff9800;
+            font-size: 0.95rem;
+        }
+
+        /* 住宿卡片样式与景区卡片统一 */
+        .hotel-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            column-gap: 1.5rem;
+            row-gap: 1.8rem;
+            margin-bottom: 3rem;
+        }
+
+        .hotel-grid .city-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 400px;
+        }
+
+        .hotel-grid .city-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .hotel-grid .city-card img {
+            width: 100%;
+            height: 240px;
+            object-fit: contain;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 0.3rem;
+        }
+
+        .hotel-grid .city-card-info {
+            padding: 1rem 0 0;
+            text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hotel-grid .city-card-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #1565c0;
+            margin-bottom: 0.8rem;
+        }
+
+        .hotel-grid .city-card-desc {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 0.8rem;
+            line-height: 1.7;
+            flex: 1;
+        }
+
+        .hotel-grid .city-card-rating {
+            color: #ff9800;
+            font-size: 0.95rem;
+        }
+
+        /* 可点击卡片 */
+        .clickable-card {
+            cursor: pointer;
+        }
+
+        /* 页脚 */
+        footer {
+            background: #60AFC4;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        footer p {
+            opacity: 0.8;
+        }
+
+        /* Dify智能体悬浮按钮 */
+        .dify-float {
+            position: fixed;
+            left: 2rem;
+            bottom: 2rem;
+            z-index: 1000;
+        }
+
+        .dify-btn {
+            width: 60px;
+            height: 60px;
+            background: #529EAF;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(82, 158, 175, 0.4);
+            transition: all 0.3s;
+        }
+
+        .dify-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(82, 158, 175, 0.5);
+        }
+
+        .dify-modal {
+            display: none;
+            position: fixed;
+            left: 90px;
+            bottom: 0;
+            width: 320px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .dify-header {
+            background: #60AFC4;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dify-close {
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .dify-body {
+            padding: 1.5rem;
+        }
+
+        .dify-body p {
+            color: #555;
+            margin-bottom: 0.5rem;
+        }
+
+        .dify-body ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .dify-body li {
+            color: #555;
+            padding: 0.3rem 0;
+        }
+
+        /* 响应式 */
+        @media (max-width: 900px) {
+            .scenic-grid, .food-grid, .hotel-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .banner-title {
+                font-size: 2.5rem;
+            }
+
+            .city-banner {
+                height: 80vh;
+                min-height: 500px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .scenic-grid, .food-grid, .hotel-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .navbar {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            
+            .nav-links {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .banner-title {
+                font-size: 2rem;
+            }
+
+            .city-banner {
+                height: 70vh;
+                min-height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <header>
+        <div class="navbar">
+            <a href="index.html" class="home-link">🏠 首页</a>
+            <div class="nav-links">
+                <a href="#jingqu" class="nav-link">景区TOP推荐</a>
+                <a href="#meishi" class="nav-link">本地美食</a>
+                <a href="#zhusu" class="nav-link">住宿推荐</a>
+            </div>
+            <div class="dropdown">
+                <a class="dropbtn">
+                    📍 选择城市 <span class="arrow">▼</span>
+                </a>
+                <div class="dropdown-content">
+                    <a href="hongzhou.html" style="background:#1565c0;color:white">杭州</a>
+                    <a href="ningbo.html">宁波</a>
+                    <a href="wengzhou.html">温州</a>
+                    <a href="jiaxing.html">嘉兴</a>
+                    <a href="huzhou.html">湖州</a>
+                    <a href="shaoxing.html">绍兴</a>
+                    <a href="jinghua.html">金华</a>
+                    <a href="quzhou.html">衢州</a>
+                    <a href="zhoushann.html">舟山</a>
+                    <a href="taizhou.html">台州</a>
+                    <a href="lishui.html">丽水</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 全屏Banner -->
+    <div class="city-banner">
+        <div class="banner-slides">
+            <div class="banner-slide active">
+                <img src="images/杭州1.jpeg" alt="杭州全景">
+            </div>
+            <div class="banner-slide">
+                <img src="images/杭州/1.jpg" alt="杭州风景2">
+            </div>
+            <div class="banner-slide">
+                <img src="images/杭州/2.jpg" alt="杭州风景3">
+            </div>
+            <div class="banner-slide">
+                <img src="images/杭州/3.jpg" alt="杭州风景4">
+            </div>
+            <div class="banner-slide">
+                <img src="images/杭州/10西溪湿地.jpg" alt="西溪湿地">
+            </div>
+        </div>
+        <div class="banner-overlay">
+            <h1 class="banner-title">杭州 | 人间天堂，江南明珠</h1>
+        </div>
+        <div class="banner-indicators">
+            <span class="banner-indicator active" data-index="0"></span>
+            <span class="banner-indicator" data-index="1"></span>
+            <span class="banner-indicator" data-index="2"></span>
+            <span class="banner-indicator" data-index="3"></span>
+            <span class="banner-indicator" data-index="4"></span>
+        </div>
+    </div>
+
+    <!-- 主内容 -->
+    <div class="container">
+        <!-- 本市TOP景区 -->
+        <h2 id="jingqu" class="section-title">本市 TOP 景区</h2>
+        <div class="scenic-grid">
+            <div class="city-card clickable-card" data-href="xihu.html">
+                <img src="images/杭州/2.jpg" alt="西湖">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">西湖</h3>
+                    <p class="city-card-desc">世界文化遗产，杭州的标志性景点，以其秀丽的湖光山色和众多名胜古迹闻名。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 4.9分</p>
+                </div>
+            </div>
+            <div class="city-card clickable-card" data-href="lingyin.html">
+                <img src="images/杭州/4.jpg" alt="灵隐寺">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">灵隐寺</h3>
+                    <p class="city-card-desc">江南著名古刹，始建于东晋，是杭州最古老的寺院之一，香火旺盛。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 4.8分</p>
+                </div>
+            </div>
+            <div class="city-card clickable-card" data-href="qiandaohu.html">
+                <img src="images/杭州/26千岛湖.jpg" alt="千岛湖">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">千岛湖</h3>
+                    <p class="city-card-desc">中国最大的人工湖之一，拥有1078座岛屿，风景秀丽，度假胜地。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 4.7分</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/杭州/13太子湾.jpg" alt="太子湾">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">太子湾</h3>
+                    <p class="city-card-desc">杭州网红公园，大片郁金香与草坪，春日赏花打卡胜地。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 4.7分</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/杭州/7良渚.jpg" alt="良渚">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">良渚</h3>
+                    <p class="city-card-desc">五千年良渚古城遗址，实证中华五千年文明史的圣地。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 4.8分</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/杭州/10西溪湿地.jpg" alt="西溪湿地">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">西溪湿地</h3>
+                    <p class="city-card-desc">国家5A级景区，中国第一个国家湿地公园，自然与人文景观交融。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 4.6分</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 本地美食 -->
+        <h2 id="meishi" class="section-title">本地美食</h2>
+        <div class="food-grid">
+            <div class="city-card clickable-card" data-href="dongporou.html">
+                <img src="images/杭州/18.webp" alt="东坡肉">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">东坡肉</h3>
+                    <p class="city-card-desc">杭州传统名菜，色泽红亮，味道醇厚，相传为苏东坡所创。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 推荐指数</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/杭州/30.png" alt="叫化鸡">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">叫化鸡</h3>
+                    <p class="city-card-desc">杭州名菜，用荷叶包裹泥土烤制，香气扑鼻，肉质鲜嫩。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 推荐指数</p>
+                </div>
+            </div>
+            <div class="city-card clickable-card" data-href="xihucuyu.html">
+                <img src="images/杭州/19.webp" alt="西湖醋鱼">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">西湖醋鱼</h3>
+                    <p class="city-card-desc">杭帮菜代表，鱼肉鲜嫩，酸甜适口，色泽红亮。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 推荐指数</p>
+                </div>
+            </div>
+            <div class="city-card clickable-card" data-href="longjingxiaren.html">
+                <img src="images/杭州/17.png" alt="龙井虾仁">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">龙井虾仁</h3>
+                    <p class="city-card-desc">用西湖龙井茶叶烹制的虾仁，茶香浓郁，虾仁鲜嫩。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 推荐指数</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/杭州/29.png" alt="西湖莼菜汤">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">西湖莼菜汤</h3>
+                    <p class="city-card-desc">西湖特色汤品，莼菜鲜嫩滑爽，汤清味美。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 推荐指数</p>
+                </div>
+            </div>
+            <div class="city-card">
+                <img src="images/杭州/20.png" alt="杭州藕粉">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">杭州藕粉</h3>
+                    <p class="city-card-desc">杭州传统特色小吃，粉质细腻，香甜顺滑，江南地道甜品。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 推荐指数</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 住宿推荐 -->
+        <h2 id="zhusu" class="section-title">住宿推荐</h2>
+        <div class="hotel-grid">
+            <div class="city-card clickable-card" data-href="fayunaman.html">
+                <img src="images/杭州/24.jpeg" alt="法云安缦">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">法云安缦</h3>
+                    <p class="city-card-desc">隐匿于灵隐古村落的高端度假酒店，禅意古朴，静谧清幽。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 五星级</p>
+                </div>
+            </div>
+            <div class="city-card clickable-card" data-href="xihuguobinguan.html">
+                <img src="images/杭州/22.jpg" alt="西湖国宾馆">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">西湖国宾馆（刘庄）</h3>
+                    <p class="city-card-desc">坐落于西湖畔的顶级国宾馆，环境幽雅，历史悠久。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 五星级</p>
+                </div>
+            </div>
+            <div class="city-card clickable-card" data-href="xizihusiji.html">
+                <img src="images/杭州/21.jpg" alt="西子湖四季酒店">
+                <div class="city-card-info">
+                    <h3 class="city-card-title">西子湖四季酒店</h3>
+                    <p class="city-card-desc">国际顶级奢华酒店，坐拥西湖美景，服务一流。</p>
+                    <p class="city-card-rating">⭐⭐⭐⭐⭐ 五星级</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <p>&copy; 2024 浙江旅游网 - 诗画浙江，山水之美</p>
+    </footer>
+
+    <!-- Dify智能体悬浮按钮 -->
+    <div class="dify-float">
+        <button class="dify-btn" id="difyBtn">🤖</button>
+        <div class="dify-modal" id="difyModal">
+            <div class="dify-header">
+                <h3>智能旅游推荐</h3>
+                <span class="dify-close" id="difyClose">×</span>
+            </div>
+            <div class="dify-body">
+                <p>🤖 欢迎咨询智能旅游助手！</p>
+                <p>我可以为您推荐：</p>
+                <ul>
+                    <li>📍 热门景点推荐</li>
+                    <li>🍜 本地特色美食</li>
+                    <li>🏨 住宿选择建议</li>
+                    <li>🚗 出行路线规划</li>
+                </ul>
+                <p>智能体功能开发中，敬请期待！</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 下拉菜单
+        document.querySelector('.dropdown').addEventListener('mouseenter', function() {
+            document.querySelector('.dropdown-content').style.display = 'block';
+        });
+        document.querySelector('.dropdown').addEventListener('mouseleave', function() {
+            document.querySelector('.dropdown-content').style.display = 'none';
+        });
+
+        // Dify模态框
+        const difyBtn = document.getElementById('difyBtn');
+        const difyModal = document.getElementById('difyModal');
+        const difyClose = document.getElementById('difyClose');
+
+        difyBtn.addEventListener('click', function() {
+            difyModal.style.display = 'block';
+        });
+
+        difyClose.addEventListener('click', function() {
+            difyModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', function(e) {
+            if (e.target == difyModal) {
+                difyModal.style.display = 'none';
+            }
+        });
+
+        // 西湖卡片点击跳转
+        const clickableCards = document.querySelectorAll('.clickable-card');
+        clickableCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const href = card.getAttribute('data-href');
+                if (href) {
+                    window.location.href = href;
+                }
+            });
+        });
+
+        // Banner轮播逻辑
+        const slides = document.querySelectorAll('.banner-slide');
+        const indicators = document.querySelectorAll('.banner-indicator');
+        let currentSlide = 0;
+        let slideInterval;
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                indicators[i].classList.remove('active');
+            });
+            slides[index].classList.add('active');
+            indicators[index].classList.add('active');
+            currentSlide = index;
+        }
+
+        function nextSlide() {
+            const nextIndex = (currentSlide + 1) % slides.length;
+            showSlide(nextIndex);
+        }
+
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => {
+                showSlide(index);
+                clearInterval(slideInterval);
+                slideInterval = setInterval(nextSlide, 5000);
+            });
+        });
+
+        slideInterval = setInterval(nextSlide, 5000);
+    </script>
+</body>
+</html>

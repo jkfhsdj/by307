@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>湖州 - 太湖明珠，清丽湖州</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        html { scroll-behavior: smooth; }
+        body { background-color: #F5F8FA; margin: 0; padding: 0; }
+        header { background: #60AFC4; padding: 1rem 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .navbar { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
+        .home-link { color: white; text-decoration: none; font-size: 1.1rem; font-weight: bold; padding: 0.5rem 1rem; border-radius: 20px; transition: background 0.3s; }
+        .home-link:hover { background: rgba(255,255,255,0.2); }
+        .nav-links { display: flex; gap: 1.5rem; }
+        .nav-link { color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 20px; transition: background 0.3s; }
+        .nav-link:hover { background: rgba(255,255,255,0.2); }
+        .dropdown { position: relative; display: inline-block; }
+        .dropbtn { color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 20px; transition: background 0.3s; display: inline-block; }
+        .dropbtn:hover { background: rgba(255,255,255,0.2); }
+        .arrow { font-size: 0.7rem; margin-left: 0.3rem; }
+        .dropdown-content { display: none; position: absolute; right: 0; background: white; min-width: 160px; box-shadow: 0 8px 16px rgba(0,0,0,0.2); border-radius: 8px; overflow: hidden; z-index: 1; }
+        .dropdown-content a { color: #333; padding: 12px 16px; text-decoration: none; display: block; transition: background 0.3s; }
+        .dropdown-content a:hover { background: #f1f1f1; }
+        .dropdown:hover .dropdown-content { display: block; }
+        .city-banner { width: 100%; min-height: 700px; height: 90vh; position: relative; overflow: hidden; }
+        .banner-slides { width: 100%; height: 100%; position: relative; }
+        .banner-slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 0.8s ease-in-out; }
+        .banner-slide.active { opacity: 1; }
+        .banner-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .banner-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .banner-title { color: white; font-size: 4rem; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .banner-indicators { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; }
+        .banner-indicator { width: 12px; height: 12px; border-radius: 50%; background: white; opacity: 0.5; cursor: pointer; transition: all 0.3s; }
+        .banner-indicator.active { opacity: 1; transform: scale(1.2); }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem 20px; }
+        .section-title { text-align: center; font-size: 1.8rem; color: #1565c0; margin-bottom: 1.5rem; position: relative; padding-bottom: 0.5rem; }
+        .section-title::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 60px; height: 3px; background: linear-gradient(90deg, #1e88e5, #1565c0); border-radius: 2px; }
+
+        /* 景区卡片网格 */
+        .scenic-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            column-gap: 1.5rem;
+            row-gap: 1.8rem;
+            margin-bottom: 3rem;
+        }
+
+        .scenic-grid .city-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 400px;
+        }
+
+        .scenic-grid .city-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .scenic-grid .city-card img {
+            width: 100%;
+            height: 240px;
+            object-fit: contain;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 0.3rem;
+        }
+
+        .scenic-grid .city-card-info {
+            padding: 1rem 0 0;
+            text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .scenic-grid .city-card-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #1565c0;
+            margin-bottom: 0.8rem;
+        }
+
+        .scenic-grid .city-card-desc {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 0.8rem;
+            line-height: 1.7;
+            flex: 1;
+        }
+
+        .scenic-grid .city-card-rating {
+            color: #ff9800;
+            font-size: 0.95rem;
+        }
+
+        /* 美食和住宿卡片样式 - 与景区卡片完全统一 */
+        .food-grid, .hotel-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            column-gap: 1.5rem;
+            row-gap: 1.8rem;
+            margin-bottom: 3rem;
+        }
+
+        .food-grid .city-card,
+        .hotel-grid .city-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 400px;
+        }
+
+        .food-grid .city-card:hover,
+        .hotel-grid .city-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .food-grid .city-card img,
+        .hotel-grid .city-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 0.3rem;
+        }
+
+        .food-grid .city-card-info,
+        .hotel-grid .city-card-info {
+            padding: 1rem 0 0;
+            text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .food-grid .city-card-title,
+        .hotel-grid .city-card-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #1565c0;
+            margin-bottom: 0.8rem;
+        }
+
+        .food-grid .city-card-desc,
+        .hotel-grid .city-card-desc {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 0.8rem;
+            line-height: 1.7;
+            flex: 1;
+        }
+
+        .food-grid .city-card-rating,
+        .hotel-grid .city-card-rating {
+            color: #ff9800;
+            font-size: 0.95rem;
+        }
+        footer { background: #60AFC4; color: white; text-align: center; padding: 2rem; margin-top: 3rem; }
+        .dify-float { position: fixed; left: 2rem; bottom: 2rem; z-index: 1000; }
+        .dify-btn { width: 60px; height: 60px; background: #529EAF; border: none; border-radius: 50%; font-size: 1.5rem; cursor: pointer; box-shadow: 0 4px 15px rgba(82,158,175,0.4); transition: all 0.3s; }
+        .dify-btn:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(82,158,175,0.5); }
+        .dify-modal { display: none; position: fixed; left: 90px; bottom: 0; width: 320px; background: white; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .dify-header { background: #60AFC4; color: white; padding: 1rem; display: flex; justify-content: space-between; align-items: center; }
+        .dify-close { font-size: 1.5rem; cursor: pointer; }
+        .dify-body { padding: 1.5rem; }
+        @media (max-width: 900px) {
+            .scenic-grid, .food-grid, .hotel-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .banner-title { font-size: 2rem; }
+        }
+        @media (max-width: 600px) {
+            .scenic-grid, .food-grid, .hotel-grid {
+                grid-template-columns: 1fr;
+            }
+            .navbar { flex-wrap: wrap; gap: 0.5rem; }
+            .nav-links { order: 3; width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <a href="index.html" class="home-link">🏠 首页</a>
+            <div class="nav-links">
+                <a href="#jingqu" class="nav-link">景区TOP推荐</a>
+                <a href="#meishi" class="nav-link">本地美食</a>
+                <a href="#zhusu" class="nav-link">住宿推荐</a>
+            </div>
+            <div class="dropdown">
+                <a class="dropbtn">📍 选择城市 <span class="arrow">▼</span></a>
+                <div class="dropdown-content">
+                    <a href="hongzhou.html">杭州</a>
+                    <a href="ningbo.html">宁波</a>
+                    <a href="wengzhou.html">温州</a>
+                    <a href="jiaxing.html">嘉兴</a>
+                    <a href="huzhou.html" style="background:#1565c0;color:white">湖州</a>
+                    <a href="shaoxing.html">绍兴</a>
+                    <a href="jinghua.html">金华</a>
+                    <a href="quzhou.html">衢州</a>
+                    <a href="zhoushann.html">舟山</a>
+                    <a href="taizhou.html">台州</a>
+                    <a href="lishui.html">丽水</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="city-banner">
+        <div class="banner-slides">
+            <div class="banner-slide active">
+                <img src="images/湖州/2.jpg" alt="湖州美景1" style="width:100%; height:100%; object-fit:cover; display:block;">
+            </div>
+            <div class="banner-slide">
+                <img src="images/湖州/4.jpg" alt="湖州美景2" style="width:100%; height:100%; object-fit:cover; display:block;">
+            </div>
+            <div class="banner-slide">
+                <img src="images/湖州/5.jpg" alt="湖州美景3" style="width:100%; height:100%; object-fit:cover; display:block;">
+            </div>
+            <div class="banner-slide">
+                <img src="images/湖州/7.jpg" alt="湖州美景4" style="width:100%; height:100%; object-fit:cover; display:block;">
+            </div>
+            <div class="banner-slide">
+                <img src="images/湖州/8.jpg" alt="湖州美景5" style="width:100%; height:100%; object-fit:cover; display:block;">
+            </div>
+        </div>
+        <div class="banner-overlay">
+            <h1 class="banner-title">湖州 | 太湖明珠，清丽湖州</h1>
+        </div>
+        <div class="banner-indicators">
+            <span class="banner-indicator active" onclick="goToSlide(0)"></span>
+            <span class="banner-indicator" onclick="goToSlide(1)"></span>
+            <span class="banner-indicator" onclick="goToSlide(2)"></span>
+            <span class="banner-indicator" onclick="goToSlide(3)"></span>
+            <span class="banner-indicator" onclick="goToSlide(4)"></span>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2 id="jingqu" class="section-title">本市 TOP 景区</h2>
+        <div class="scenic-grid">
+            <div class="city-card"><img src="images/湖州/6.jpg" alt="太湖" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">太湖</h3><p class="city-card-desc">中国第三大淡水湖，湖光山色秀美，物产丰富。</p><p class="city-card-rating">⭐⭐⭐⭐⭐ 4.7分</p></div></div>
+            <div class="city-card"><img src="images/湖州/9.jpg" alt="南浔古镇" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">南浔古镇</h3><p class="city-card-desc">江南六大古镇之一，以"富甲天下"著称，中西合璧的建筑风格。</p><p class="city-card-rating">⭐⭐⭐⭐⭐ 4.8分</p></div></div>
+            <div class="city-card"><img src="images/湖州/3.jpg" alt="莫干山" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">莫干山</h3><p class="city-card-desc">中国四大避暑胜地之一，山峦连绵，风景秀丽，是度假休闲的理想选择。</p><p class="city-card-rating">⭐⭐⭐⭐⭐ 4.8分</p></div></div>
+            <div class="city-card"><img src="images/湖州/3.jpg" alt="安吉竹海" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">安吉竹海</h3><p class="city-card-desc">中国最大的竹子基地，漫山遍野的翠竹，景色壮观。</p><p class="city-card-rating">⭐⭐⭐⭐ 4.6分</p></div></div>
+            <div class="city-card"><img src="images/湖州/8.jpg" alt="长兴湿地" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">长兴湿地</h3><p class="city-card-desc">国家级湿地公园，生态环境优美，是候鸟的天堂。</p><p class="city-card-rating">⭐⭐⭐⭐ 4.5分</p></div></div>
+            <div class="city-card"><img src="images/湖州/9.jpg" alt="湖州老街" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">湖州老街</h3><p class="city-card-desc">保存完好的明清古街道，充满历史韵味。</p><p class="city-card-rating">⭐⭐⭐⭐ 4.4分</p></div></div>
+        </div>
+
+        <h2 id="meishi" class="section-title">本地美食</h2>
+        <div class="food-grid">
+            <div class="city-card"><img src="images/湖州/10.jpg" alt="湖州笋" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">湖州笋</h3><p class="city-card-desc">湖州特产，鲜嫩可口，是春季不可错过的美味。</p><p class="city-card-rating">⭐⭐⭐⭐⭐ 推荐指数</p></div></div>
+            <div class="city-card"><img src="images/湖州/11.jpg" alt="太湖三白" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">太湖三白</h3><p class="city-card-desc">太湖银鱼、白鱼、白虾，肉质鲜嫩，味道鲜美。</p><p class="city-card-rating">⭐⭐⭐⭐⭐ 推荐指数</p></div></div>
+            <div class="city-card"><img src="images/湖州/12.jpg" alt="湖州糕点" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">湖州糕点</h3><p class="city-card-desc">种类繁多，口味独特，是送礼佳品。</p><p class="city-card-rating">⭐⭐⭐⭐ 推荐指数</p></div></div>
+            <div class="city-card"><img src="images/湖州/13.jpg" alt="湖州面" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">湖州面</h3><p class="city-card-desc">汤鲜味美，浇头丰富，是湖州人早餐的首选。</p><p class="city-card-rating">⭐⭐⭐⭐ 推荐指数</p></div></div>
+            <div class="city-card"><img src="images/湖州/14.jpg" alt="湖州酱鸭" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">湖州酱鸭</h3><p class="city-card-desc">色泽红亮，肉质鲜嫩，咸香入味。</p><p class="city-card-rating">⭐⭐⭐⭐⭐ 推荐指数</p></div></div>
+            <div class="city-card"><img src="images/湖州/15.jpg" alt="安吉白茶" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">安吉白茶</h3><p class="city-card-desc">中国名茶，茶汤清澈，滋味鲜爽。</p><p class="city-card-rating">⭐⭐⭐⭐⭐ 推荐指数</p></div></div>
+        </div>
+
+        <h2 id="zhusu" class="section-title">住宿推荐</h2>
+        <div class="hotel-grid">
+            <div class="city-card"><img src="images/湖州/16.jpg" alt="湖州喜来登" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">湖州喜来登</h3><p class="city-card-desc">位于太湖畔，湖景优美，设施豪华。</p><p class="city-card-rating">⭐⭐⭐⭐⭐ 豪华型</p></div></div>
+            <div class="city-card"><img src="images/湖州/17.jpg" alt="湖州皇冠假日" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">湖州皇冠假日</h3><p class="city-card-desc">国际品牌商务酒店，交通便利，服务周到。</p><p class="city-card-rating">⭐⭐⭐⭐⭐ 豪华型</p></div></div>
+            <div class="city-card"><img src="images/湖州/18.jpg" alt="湖州如家" style="width:100%;height:220px;object-fit:cover;display:block;border-top-left-radius:inherit;border-top-right-radius:inherit;"><div class="city-card-info"><h3 class="city-card-title">湖州如家</h3><p class="city-card-desc">经济实惠型酒店，干净整洁，性价比高。</p><p class="city-card-rating">⭐⭐⭐ 经济型</p></div></div>
+        </div>
+    </div>
+
+    <footer><p>&copy; 2024 浙江旅游网 - 诗画浙江，山水之美</p></footer>
+
+    <div class="dify-float"><button class="dify-btn" id="difyBtn">🤖</button><div class="dify-modal" id="difyModal"><div class="dify-header"><h3>智能旅游推荐</h3><span class="dify-close" id="difyClose">×</span></div><div class="dify-body"><p>🤖 欢迎咨询智能旅游助手！</p><p>我可以为您推荐：</p><ul><li>📍 热门景点推荐</li><li>🍜 本地特色美食</li><li>🏨 住宿选择建议</li><li>🚗 出行路线规划</li></ul><p>智能体功能开发中，敬请期待！</p></div></div></div>
+
+    <script>
+        const difyBtn = document.getElementById('difyBtn');
+        const difyModal = document.getElementById('difyModal');
+        const difyClose = document.getElementById('difyClose');
+        difyBtn.addEventListener('click', () => { difyModal.style.display = 'block'; });
+        difyClose.addEventListener('click', () => { difyModal.style.display = 'none'; });
+        window.addEventListener('click', (e) => { if (e.target == difyModal) difyModal.style.display = 'none'; });
+
+        const slides = document.querySelectorAll('.banner-slide');
+        const indicators = document.querySelectorAll('.banner-indicator');
+        let currentSlide = 0;
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                indicators[i].classList.remove('active');
+            });
+            slides[index].classList.add('active');
+            indicators[index].classList.add('active');
+            currentSlide = index;
+        }
+
+        function goToSlide(index) {
+            showSlide(index);
+        }
+
+        function nextSlide() {
+            let nextIndex = (currentSlide + 1) % slides.length;
+            showSlide(nextIndex);
+        }
+
+        setInterval(nextSlide, 5000);
+    </script>
+</body>
+</html>
